@@ -1,6 +1,0 @@
-<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SiriPlan">
-  <rect x="6" y="10" width="52" height="48" rx="12" fill="#1d2023" stroke="#f1c100" stroke-width="3"/>
-  <path d="M6 24h52" stroke="#f1c100" stroke-width="3"/>
-  <path d="M20 4v10M44 4v10" stroke="#f1c100" stroke-width="3" stroke-linecap="round"/>
-  <path d="M32 31l2.4 6.1 6.1 2.4-6.1 2.4L32 48l-2.4-6.1-6.1-2.4 6.1-2.4z" fill="#f1c100"/>
-</svg>
