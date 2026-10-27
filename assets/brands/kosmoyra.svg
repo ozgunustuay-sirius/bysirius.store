@@ -1,0 +1,8 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KosMoyra">
+  <g transform="rotate(-22 16 16)">
+    <ellipse cx="16" cy="16" rx="14.5" ry="6.6" stroke="#a95c22" stroke-width="2" fill="none"/>
+    <circle cx="30.2" cy="16" r="2.5" fill="#a95c22"/>
+  </g>
+  <circle cx="16" cy="16" r="6.1" fill="#17143a"/>
+  <path d="M7 4.2l.9 2.3 2.3.9-2.3.9L7 10.6l-.9-2.3L3.8 7.4l2.3-.9z" fill="#a95c22"/>
+</svg>
