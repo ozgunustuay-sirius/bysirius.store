@@ -53,6 +53,14 @@ input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid
 input{flex:1 1 200px}
 .btn{font:inherit;font-weight:700;cursor:pointer;border:0;border-radius:8px;padding:9px 14px;background:var(--brand);color:var(--brand-ink)}
 .btn.alt{background:var(--accent);color:var(--accent-ink)}
+[hidden]{display:none!important}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tile{font:inherit;color:var(--ink);cursor:pointer;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:2px;text-align:left}
+.tile:hover{border-color:var(--ok)}
+.tile:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tile:disabled{opacity:.5;cursor:default}
+.tile span{font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums}
+.tile small{color:var(--muted)}
 .btn.sm{padding:4px 10px;font-size:13px;font-weight:500;margin:2px 0}
 .panel p{margin:6px 0}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
@@ -99,6 +107,8 @@ input,select{-webkit-user-select:text;user-select:text}
     <button data-tab="ozet" aria-current="page">Özet</button>
     <button data-tab="uyeler">Üyeler</button>
     <button data-tab="finans">Gelir-Gider</button>
+    <button data-tab="satis">Satış</button>
+    <button data-tab="stok">Stok <span class="badge" id="stokBadge">0</span></button>
     <button data-tab="hatirlatma">Hatırlatmalar <span class="badge" id="navBadge">0</span></button>
     <button data-tab="kvkk">KVKK ve Veri</button>
     <div class="demo">Demo: veriler örnektir, sayfa yenilenince sıfırlanır.</div>
@@ -132,6 +142,18 @@ var expenses = [
   {d:'05 Kas', cat:'Personel', note:'Saha görevlileri', amt:62000},
   {d:'06 Kas', cat:'Saha bakımı', note:'Çim ve file bakımı', amt:15100}
 ];
+// Kafeterya ve ekipman ürünleri. stock = şu anki stok, min = kritik seviye, sold = bu ay satılan adet.
+var products = [
+  {id:1, name:'Su 0,5 L', cat:'Kafeterya', price:15, cost:8, stock:240, min:100, sold:142},
+  {id:2, name:'Gazlı içecek', cat:'Kafeterya', price:40, cost:24, stock:96, min:48, sold:38},
+  {id:3, name:'Çay', cat:'Kafeterya', price:20, cost:5, stock:300, min:100, sold:120},
+  {id:4, name:'Enerji içeceği', cat:'Kafeterya', price:70, cost:45, stock:30, min:36, sold:12},
+  {id:5, name:'Atıştırmalık', cat:'Kafeterya', price:35, cost:20, stock:60, min:30, sold:41},
+  {id:6, name:'Top', cat:'Ekipman', price:900, cost:600, stock:6, min:4, sold:2},
+  {id:7, name:'Forma', cat:'Ekipman', price:450, cost:260, stock:18, min:10, sold:6},
+  {id:8, name:'Kaleci eldiveni', cat:'Ekipman', price:600, cost:380, stock:3, min:4, sold:1}
+];
+var salesLog = [{t:'19:05',name:'Su 0,5 L',amt:15},{t:'19:02',name:'Çay',amt:20},{t:'18:47',name:'Forma',amt:450},{t:'18:31',name:'Gazlı içecek',amt:40}];
 var tab = 'ozet', q = '', filt = 'hepsi', page = 0, PER = 12;
 var tl = function(n){ return n.toLocaleString('tr-TR') + ' ₺'; };
 function status(m){ if (m.paid) return 'ok'; var late = TODAY - m.due; return late >= 2 ? 'late' : 'wait'; }
@@ -140,7 +162,9 @@ function stats(){
   var exp = 0, got = 0, late = 0, lateAmt = 0, paidN = 0;
   members.forEach(function(m){ exp += m.fee; if (m.paid) { got += m.fee; paidN++; } else if (status(m)==='late') { late++; lateAmt += m.fee; } });
   var spend = expenses.reduce(function(a,e){ return a + e.amt; }, 0);
-  return {exp:exp, got:got, out:exp-got, late:late, lateAmt:lateAmt, paidN:paidN, spend:spend, net:got-spend};
+  var sat = 0, satCost = 0;
+  products.forEach(function(p){ sat += p.sold * p.price; satCost += p.sold * p.cost; });
+  return {exp:exp, got:got, out:exp-got, late:late, lateAmt:lateAmt, paidN:paidN, spend:spend, sat:sat, satProfit:sat-satCost, net:got+sat-spend};
 }
 function toast(t){ var el = document.getElementById('toast'); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function(){ el.hidden = true; }, 2200); }
 function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -157,6 +181,7 @@ function viewOzet(){
   '<section class="cards"><div class="card hl"><div class="k">Tahsil edilen aidat</div><div class="v">'+tl(s.got)+'</div></div>'+
   '<div class="card"><div class="k">Bekleyen alacak</div><div class="v">'+tl(s.out)+'</div></div>'+
   '<div class="card"><div class="k">2+ gün geciken ('+s.late+' üye)</div><div class="v">'+tl(s.lateAmt)+'</div></div>'+
+  '<div class="card"><div class="k">Satış geliri (kafeterya, ekipman)</div><div class="v">'+tl(s.sat)+'</div></div>'+
   '<div class="card"><div class="k">Aylık net (gelir - gider)</div><div class="v">'+tl(s.net)+'</div></div></section>'+
   '<section class="two"><div class="panel"><h2>Tahsilat oranı: %'+pct+'</h2><div class="track" style="height:18px"><i style="display:block;height:18px;border-radius:6px;background:var(--ok);width:'+pct+'%"></i></div><p class="sub">'+s.paidN+' üye öder, '+(members.length-s.paidN)+' üyenin ödemesi bekleniyor.</p>'+
   '<h2 style="margin-top:18px">Geciken üyeler</h2><div class="scroll"><table style="min-width:420px"><tr><th>Üye</th><th class="r">Tutar</th><th>Durum</th></tr>'+lateList+'</table></div></div>'+
@@ -190,7 +215,7 @@ function viewFinans(){
   var s = stats();
   var rows = expenses.map(function(e){ return '<tr><td>'+e.d+'</td><td>'+esc(e.cat)+'</td><td>'+esc(e.note)+'</td><td class="r">'+tl(e.amt)+'</td></tr>'; }).join('');
   return '<header class="top"><div><h1>Gelir-Gider</h1><p class="sub">'+MONTH+' kasa durumu</p></div></header>'+
-  '<section class="cards"><div class="card"><div class="k">Aidat geliri</div><div class="v">'+tl(s.got)+'</div></div><div class="card"><div class="k">Toplam gider</div><div class="v">'+tl(s.spend)+'</div></div><div class="card hl"><div class="k">Net</div><div class="v">'+tl(s.net)+'</div></div></section>'+
+  '<section class="cards"><div class="card"><div class="k">Aidat geliri</div><div class="v">'+tl(s.got)+'</div></div><div class="card"><div class="k">Satış geliri</div><div class="v">'+tl(s.sat)+'</div></div><div class="card"><div class="k">Toplam gider</div><div class="v">'+tl(s.spend)+'</div></div><div class="card hl"><div class="k">Net</div><div class="v">'+tl(s.net)+'</div></div></section>'+
   '<div class="panel"><h2>Gider ekle</h2><form id="expForm" class="form"><input id="eNote" placeholder="Açıklama" required aria-label="Açıklama"><select id="eCat" aria-label="Kategori"><option>Elektrik</option><option>Su</option><option>Kira</option><option>Personel</option><option>Saha bakımı</option><option>Ekipman</option><option>Vergi</option><option>Diğer</option></select><input id="eAmt" type="number" min="1" placeholder="Tutar (₺)" required aria-label="Tutar"><button class="btn alt" type="submit">Gideri kaydet</button></form>'+
   '<h2>Giderler</h2><div class="scroll"><table style="min-width:480px"><tr><th>Tarih</th><th>Kategori</th><th>Açıklama</th><th class="r">Tutar</th></tr>'+rows+'</table></div></div>';
 }
@@ -221,10 +246,34 @@ function viewKvkk(){
   '<section class="two"><div class="panel"><h2>Taraflar ve roller</h2><p><b>Veri sorumlusu:</b> halı saha işletmesi</p><p><b>Veri işleyen:</b> BY SİRİUS (panel ve barındırma hizmeti)</p><p class="sub">Aralarında veri işleme sözleşmesi bulunur. Aydınlatma metni işletme adına hazırlanır ve üye kaydında verilir.</p></div>'+
   '<div class="panel"><h2>Üye hakları ve sunucu</h2><p><b>Talepler:</b> bilgi alma, düzeltme, silme ve WhatsApp iznini geri alma talepleri üye kartından işlenir. Yasal süre 30 gündür.</p><p><b>Barındırma:</b> veriler Avrupa bölgesindeki bulut sunucuda tutulur, yurt dışı aktarım aydınlatma metninde belirtilir.</p><p><b>Güvenlik:</b> şifreli bağlantı, yetkiye göre erişim, günlük yedek.</p></div></section>';
 }
+function critical(){ return products.filter(function(p){ return p.stock <= p.min; }); }
+function viewSatis(){
+  var s = stats();
+  var tiles = products.map(function(p){
+    return '<button class="tile" data-sell="'+p.id+'" '+(p.stock<=0?'disabled':'')+'><b>'+esc(p.name)+'</b><span>'+tl(p.price)+'</span><small>Stok: '+p.stock+'</small></button>'; }).join('');
+  var log = salesLog.slice(0,6).map(function(r){ return '<tr><td>'+r.t+'</td><td>'+esc(r.name)+'</td><td class="r">'+tl(r.amt)+'</td></tr>'; }).join('') || '<tr><td colspan="3" class="sub">Henüz satış yok. Yukarıdan bir ürüne tıklayın.</td></tr>';
+  var rows = products.filter(function(p){ return p.sold > 0; }).sort(function(a,b){ return b.sold*b.price - a.sold*a.price; }).map(function(p){
+    return '<tr><td>'+esc(p.name)+'</td><td class="r">'+p.sold+'</td><td class="r">'+tl(p.sold*p.price)+'</td><td class="r">'+tl(p.sold*(p.price-p.cost))+'</td></tr>'; }).join('');
+  return '<header class="top"><div><h1>Satış</h1><p class="sub">Kafeterya ve ekipman satışı. Ürüne tıklayınca satış yazılır, stok düşer.</p></div></header>'+
+  '<section class="cards"><div class="card hl"><div class="k">Bu ay satış geliri</div><div class="v">'+tl(s.sat)+'</div></div><div class="card"><div class="k">Satıştan kâr</div><div class="v">'+tl(s.satProfit)+'</div></div></section>'+
+  '<div class="panel"><h2>Hızlı satış</h2><div class="tiles">'+tiles+'</div></div>'+
+  '<section class="two"><div class="panel"><h2>Ürün bazında satış</h2><div class="scroll"><table style="min-width:420px"><tr><th>Ürün</th><th class="r">Adet</th><th class="r">Ciro</th><th class="r">Kâr</th></tr>'+rows+'</table></div></div>'+
+  '<div class="panel"><h2>Son satışlar</h2><div class="scroll"><table style="min-width:340px"><tr><th>Saat</th><th>Ürün</th><th class="r">Tutar</th></tr>'+log+'</table></div></div></section>';
+}
+function viewStok(){
+  var cr = critical(), val = products.reduce(function(a,p){ return a + p.stock * p.cost; }, 0);
+  var rows = products.map(function(p){
+    var low = p.stock <= p.min, qty = p.cat==='Kafeterya' ? 24 : 6;
+    return '<tr><td>'+esc(p.name)+'</td><td>'+p.cat+'</td><td class="r">'+p.stock+'</td><td class="r">'+p.min+'</td><td><span class="pill '+(low?'late':'ok')+'">'+(low?'Kritik':'Yeterli')+'</span></td><td><button class="btn '+(low?'alt':'ghost')+' sm" data-restock="'+p.id+'">Stok gir (+'+qty+')</button></td></tr>'; }).join('');
+  return '<header class="top"><div><h1>Stok</h1><p class="sub">Su, top, forma ve diğer ürünler. Stok kritik seviyeye inince uyarı çıkar.</p></div></header>'+
+  '<section class="cards"><div class="card"><div class="k">Ürün çeşidi</div><div class="v">'+products.length+'</div></div><div class="card hl"><div class="k">Kritik stok</div><div class="v">'+cr.length+'</div></div><div class="card"><div class="k">Stok değeri (maliyet)</div><div class="v">'+tl(val)+'</div></div></section>'+
+  '<div class="panel"><div class="scroll"><table><tr><th>Ürün</th><th>Kategori</th><th class="r">Stok</th><th class="r">Asgari</th><th>Durum</th><th>İşlem</th></tr>'+rows+'</table></div><p class="sub">Stok girişi yapınca maliyeti otomatik gider olarak Gelir-Gider sekmesine yazılır.</p></div>';
+}
 function render(){
   var v = document.getElementById('view');
-  v.innerHTML = tab==='ozet' ? viewOzet() : tab==='uyeler' ? viewUyeler() : tab==='finans' ? viewFinans() : tab==='kvkk' ? viewKvkk() : viewHatirlatma();
+  v.innerHTML = tab==='ozet' ? viewOzet() : tab==='uyeler' ? viewUyeler() : tab==='finans' ? viewFinans() : tab==='kvkk' ? viewKvkk() : tab==='satis' ? viewSatis() : tab==='stok' ? viewStok() : viewHatirlatma();
   document.getElementById('navBadge').textContent = queue().length;
+  var sb = document.getElementById('stokBadge'); sb.textContent = critical().length; sb.hidden = critical().length === 0;
   document.querySelectorAll('nav button[data-tab]').forEach(function(b){ if (b.dataset.tab===tab) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
   var f = document.getElementById('f'); if (f) f.value = filt;
 }
@@ -234,6 +283,17 @@ document.addEventListener('click', function(e){
   else if (t.dataset.toggle) { var m = members[+t.dataset.toggle - 1]; m.paid = !m.paid; if (m.paid) m.reminded = false; render(); toast(m.name+': '+(m.paid?'Ödendi':'Ödenmedi')+' olarak işaretlendi'); }
   else if (t.dataset.aydin) { var a = members[+t.dataset.aydin - 1]; a.aydin = !a.aydin; if (!a.aydin) a.wa = false; render(); toast(a.name+': aydınlatma '+(a.aydin?'verildi':'verilmedi')); }
   else if (t.dataset.wa) { var w = members[+t.dataset.wa - 1]; if (!w.aydin && !w.wa) { toast('Önce aydınlatma metni verilmeli'); return; } w.wa = !w.wa; render(); toast(w.name+': WhatsApp izni '+(w.wa?'var':'yok')); }
+  else if (t.dataset.sell) {
+    var p = products[+t.dataset.sell - 1]; if (p.stock <= 0) { toast(p.name+' stokta yok'); return; }
+    p.stock--; p.sold++; var d = new Date();
+    salesLog.unshift({t:('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2), name:p.name, amt:p.price});
+    render(); toast(p.name+' satıldı · '+tl(p.price)+(p.stock<=p.min?' · stok kritik':''));
+  }
+  else if (t.dataset.restock) {
+    var r = products[+t.dataset.restock - 1], qn = r.cat==='Kafeterya' ? 24 : 6;
+    r.stock += qn; expenses.unshift({d:TODAY+' Kas', cat:'Stok alımı', note:r.name+' x'+qn, amt:qn*r.cost});
+    render(); toast(r.name+': +'+qn+' stok girildi, gider yazıldı');
+  }
   else if (t.dataset.page) { page += +t.dataset.page; render(); }
   else if (t.dataset.send) { var n = queue().length; queue().forEach(function(m){ m.reminded = true; }); render(); toast(n+' üyeye hatırlatma gönderildi (demo)'); }
 });
