@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Halı Saha Aidat Paneli</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Oswald:wght@500;600&display=swap">
+<style>
+/* Layout: sol menü + içerik alanı; dar ekranda menü üste yatay şeride döner. Renkler çim saha yeşili, uyarılar turuncu. */
+:root{
+  --bg:#F3F1EA; --surface:#FFFFFF; --ink:#14261C; --muted:#52645A; --line:#DDD9C8;
+  --brand:#0F2A1E; --brand-ink:#F1EFE6; --accent:#B8E04A; --accent-ink:#14261C;
+  --ok:#2F7A3E; --ok-bg:#E1F1DF; --warn:#A8530F; --warn-bg:#FBE8D3; --late:#A12B2B; --late-bg:#F8DCDC;
+  --display:'Oswald','Arial Narrow',Arial,sans-serif; --body:'DM Sans',Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0C1A13; --surface:#13271C; --ink:#EDF2E9; --muted:#9DB3A4; --line:#25402F;
+  --brand:#071109; --brand-ink:#EDF2E9; --accent:#B8E04A; --accent-ink:#14261C;
+  --ok:#8FD39A; --ok-bg:#1B3A26; --warn:#F0B27A; --warn-bg:#3F2A14; --late:#F29A9A; --late-bg:#472020; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0C1A13; --surface:#13271C; --ink:#EDF2E9; --muted:#9DB3A4; --line:#25402F;
+  --brand:#071109; --brand-ink:#EDF2E9; --accent:#B8E04A; --accent-ink:#14261C;
+  --ok:#8FD39A; --ok-bg:#1B3A26; --warn:#F0B27A; --warn-bg:#3F2A14; --late:#F29A9A; --late-bg:#472020; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px}
+.app{display:grid;grid-template-columns:230px minmax(0,1fr);gap:24px;max-width:1280px;margin:0 auto}
+nav{background:var(--brand);color:var(--brand-ink);border-radius:14px;padding:20px 14px;display:flex;flex-direction:column;gap:6px;align-self:start;position:sticky;top:16px}
+.logo{font-family:var(--display);font-size:22px;letter-spacing:.5px;padding:0 10px 14px;line-height:1.15}
+.logo small{display:block;font-family:var(--body);font-size:13px;opacity:.7;letter-spacing:0;margin-top:4px}
+nav button{all:unset;cursor:pointer;padding:10px 12px;border-radius:8px;font-size:16px;display:flex;justify-content:space-between;gap:8px}
+nav button:hover{background:rgba(255,255,255,.08)}
+nav button[aria-current="page"]{background:var(--accent);color:var(--accent-ink);font-weight:700}
+nav button:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+nav .badge{background:var(--late);color:#fff;border-radius:99px;padding:0 8px;font-size:13px;font-weight:700}
+.demo{font-size:13px;opacity:.7;padding:14px 10px 0}
+main{min-width:0;display:flex;flex-direction:column;gap:20px}
+header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+h1{font-family:var(--display);font-weight:600;font-size:34px;line-height:1.1;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.card .k{color:var(--muted);font-size:14px}
+.card .v{font-family:var(--display);font-size:34px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2}
+.card.hl{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.card.hl .k{color:var(--accent-ink);opacity:.8}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}
+.panel h2{font-family:var(--display);font-weight:500;font-size:22px;margin:0 0 12px}
+.two{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:14px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;min-width:0}
+input{flex:1 1 200px}
+.btn{font:inherit;font-weight:700;cursor:pointer;border:0;border-radius:8px;padding:9px 14px;background:var(--brand);color:var(--brand-ink)}
+.btn.alt{background:var(--accent);color:var(--accent-ink)}
+.btn.sm{padding:4px 10px;font-size:13px;font-weight:500;margin:2px 0}
+.panel p{margin:6px 0}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:default}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;min-width:560px}
+th{text-align:left;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:2px solid var(--line)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td.r,th.r{text-align:right}
+.pill{display:inline-block;border-radius:99px;padding:2px 10px;font-size:14px;font-weight:700}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.wait{background:var(--warn-bg);color:var(--warn)}
+.pill.late{background:var(--late-bg);color:var(--late)}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;color:var(--muted);font-size:14px;flex-wrap:wrap}
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar{display:grid;grid-template-columns:110px minmax(0,1fr) 90px;gap:10px;align-items:center;font-size:14px}
+.bar i{display:block;height:12px;border-radius:6px;background:var(--brand)}
+.track{background:var(--bg);border-radius:6px;height:12px}
+.wa{background:#DCF8C6;color:#14261C;border-radius:14px;padding:14px;font-size:15px;line-height:1.5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .wa{background:#1F4A33;color:#EDF2E9}}
+:root[data-theme="dark"] .wa{background:#1F4A33;color:#EDF2E9}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.brand{max-width:1280px;margin:24px auto 0;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;text-align:center}
+.brand b{color:var(--ink)}
+.brand a{color:var(--ink);text-decoration:underline;-webkit-user-select:text;user-select:text}
+body{-webkit-user-select:none;user-select:none}
+input,select{-webkit-user-select:text;user-select:text}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--brand);color:var(--brand-ink);padding:10px 18px;border-radius:10px;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+@media (max-width:820px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  nav{position:static;flex-direction:row;flex-wrap:wrap;padding:12px}
+  .logo,.demo{display:none}
+  .two{grid-template-columns:minmax(0,1fr)}
+  h1{font-size:28px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <nav aria-label="Ana menü">
+    <div class="logo">HALI SAHA<br>AİDAT PANELİ<small>Örnek işletme · Kasım 2026</small></div>
+    <button data-tab="ozet" aria-current="page">Özet</button>
+    <button data-tab="uyeler">Üyeler</button>
+    <button data-tab="finans">Gelir-Gider</button>
+    <button data-tab="hatirlatma">Hatırlatmalar <span class="badge" id="navBadge">0</span></button>
+    <button data-tab="kvkk">KVKK ve Veri</button>
+    <div class="demo">Demo: veriler örnektir, sayfa yenilenince sıfırlanır.</div>
+  </nav>
+  <main id="view"></main>
+</div>
+<footer class="brand">
+  <b>BY SİRİUS</b> · <a href="https://bysirius.com">bysirius.com</a> · <a href="mailto:info@bysirius.com">info@bysirius.com</a> · <a href="https://wa.me/905355032634">WhatsApp +90 535 503 26 34</a><br>
+  © 2026 BY SİRİUS. Bu demo ve tasarımı izinsiz kopyalanamaz, çoğaltılamaz veya yeniden kullanılamaz.
+</footer>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+// Demo tarihi sabit: 8 Kasım 2026. Aidat vadesi her üyenin ayın kaçıncı günü olduğuna bağlı.
+var TODAY = 8, MONTH = 'Kasım 2026';
+var first = ['Ahmet','Mehmet','Can','Emre','Burak','Okan','Serkan','Kaan','Mert','Onur','Tolga','Barış','Cem','Deniz','Eren','Furkan','Gökhan','Hakan','İlker','Kerem','Murat','Necati','Oğuz','Polat','Rıza','Selim','Taner','Uğur','Volkan','Yasin'];
+var last = ['Yılmaz','Kaya','Demir','Şahin','Çelik','Aydın','Öztürk','Arslan','Doğan','Kılıç','Aslan','Çetin','Koç','Kurt','Özdemir','Polat','Erdoğan','Güneş','Aksoy','Bulut'];
+var seed = 7; function rnd(){ seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+var members = [];
+for (var i = 0; i < 280; i++) {
+  var fee = rnd() < 0.7 ? 1500 : 1200;
+  var due = 1 + Math.floor(rnd() * 15);
+  var paid = due > TODAY ? rnd() < 0.35 : rnd() < 0.82;
+  var ay = rnd() < 0.93;
+  members.push({id:i+1, name:first[i%30]+' '+last[Math.floor(i/30)%20], phone:'05'+(30+Math.floor(rnd()*20))+' *** ** '+String(10+Math.floor(rnd()*89)), fee:fee, due:due, paid:paid, reminded:false, aydin:ay, wa:ay && rnd() < 0.9});
+}
+var expenses = [
+  {d:'03 Kas', cat:'Elektrik', note:'Aydınlatma faturası', amt:38500},
+  {d:'04 Kas', cat:'Su', note:'Saha sulama', amt:9200},
+  {d:'01 Kas', cat:'Kira', note:'Zemin kirası', amt:90000},
+  {d:'05 Kas', cat:'Personel', note:'Saha görevlileri', amt:62000},
+  {d:'06 Kas', cat:'Saha bakımı', note:'Çim ve file bakımı', amt:15100}
+];
+var tab = 'ozet', q = '', filt = 'hepsi', page = 0, PER = 12;
+var tl = function(n){ return n.toLocaleString('tr-TR') + ' ₺'; };
+function status(m){ if (m.paid) return 'ok'; var late = TODAY - m.due; return late >= 2 ? 'late' : 'wait'; }
+function label(m){ var s = status(m); return s==='ok' ? 'Ödendi' : s==='late' ? (TODAY-m.due)+' gün gecikti' : (m.due>TODAY ? 'Bekliyor' : 'Vade günü'); }
+function stats(){
+  var exp = 0, got = 0, late = 0, lateAmt = 0, paidN = 0;
+  members.forEach(function(m){ exp += m.fee; if (m.paid) { got += m.fee; paidN++; } else if (status(m)==='late') { late++; lateAmt += m.fee; } });
+  var spend = expenses.reduce(function(a,e){ return a + e.amt; }, 0);
+  return {exp:exp, got:got, out:exp-got, late:late, lateAmt:lateAmt, paidN:paidN, spend:spend, net:got-spend};
+}
+function toast(t){ var el = document.getElementById('toast'); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function(){ el.hidden = true; }, 2200); }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+function viewOzet(){
+  var s = stats(), pct = Math.round(s.got / s.exp * 100);
+  var cats = {}; expenses.forEach(function(e){ cats[e.cat] = (cats[e.cat]||0) + e.amt; });
+  var max = Math.max.apply(null, Object.keys(cats).map(function(k){ return cats[k]; }));
+  var bars = Object.keys(cats).sort(function(a,b){ return cats[b]-cats[a]; }).map(function(k){
+    return '<div class="bar"><span>'+esc(k)+'</span><span class="track"><i style="width:'+Math.round(cats[k]/max*100)+'%"></i></span><span style="text-align:right">'+tl(cats[k])+'</span></div>'; }).join('');
+  var lateList = members.filter(function(m){ return status(m)==='late'; }).sort(function(a,b){ return a.due-b.due; }).slice(0,6).map(function(m){
+    return '<tr><td>'+esc(m.name)+'</td><td class="r">'+tl(m.fee)+'</td><td><span class="pill late">'+label(m)+'</span></td></tr>'; }).join('');
+  return '<header class="top"><div><h1>Genel Özet</h1><p class="sub">'+MONTH+' · '+members.length+' üye · bugün '+TODAY+' Kasım</p></div></header>'+
+  '<section class="cards"><div class="card hl"><div class="k">Tahsil edilen aidat</div><div class="v">'+tl(s.got)+'</div></div>'+
+  '<div class="card"><div class="k">Bekleyen alacak</div><div class="v">'+tl(s.out)+'</div></div>'+
+  '<div class="card"><div class="k">2+ gün geciken ('+s.late+' üye)</div><div class="v">'+tl(s.lateAmt)+'</div></div>'+
+  '<div class="card"><div class="k">Aylık net (gelir - gider)</div><div class="v">'+tl(s.net)+'</div></div></section>'+
+  '<section class="two"><div class="panel"><h2>Tahsilat oranı: %'+pct+'</h2><div class="track" style="height:18px"><i style="display:block;height:18px;border-radius:6px;background:var(--ok);width:'+pct+'%"></i></div><p class="sub">'+s.paidN+' üye öder, '+(members.length-s.paidN)+' üyenin ödemesi bekleniyor.</p>'+
+  '<h2 style="margin-top:18px">Geciken üyeler</h2><div class="scroll"><table style="min-width:420px"><tr><th>Üye</th><th class="r">Tutar</th><th>Durum</th></tr>'+lateList+'</table></div></div>'+
+  '<div class="panel"><h2>Gider dağılımı</h2><div class="bars">'+bars+'</div></div></section>';
+}
+function filtered(){
+  return members.filter(function(m){
+    if (q && m.name.toLowerCase().indexOf(q.toLowerCase()) < 0) return false;
+    var s = status(m);
+    if (filt==='odendi') return s==='ok';
+    if (filt==='odenmedi') return s!=='ok';
+    if (filt==='gecikmis') return s==='late';
+    if (filt==='izinsiz') return !m.wa || !m.aydin;
+    return true;
+  });
+}
+function viewUyeler(){
+  var list = filtered(), pages = Math.max(1, Math.ceil(list.length / PER));
+  if (page >= pages) page = pages - 1;
+  var rows = list.slice(page*PER, page*PER+PER).map(function(m){
+    var s = status(m);
+    return '<tr><td>'+esc(m.name)+'</td><td>'+m.phone+'</td><td class="r">'+tl(m.fee)+'</td><td>Ayın '+m.due+'’i</td><td><span class="pill '+s+'">'+label(m)+'</span></td><td><button class="btn ghost sm" data-aydin="'+m.id+'">Aydınlatma: '+(m.aydin?'verildi':'verilmedi')+'</button> <button class="btn ghost sm" data-wa="'+m.id+'">WhatsApp izni: '+(m.wa?'var':'yok')+'</button></td><td><button class="btn '+(m.paid?'ghost':'alt')+'" data-toggle="'+m.id+'">'+(m.paid?'Ödenmedi yap':'Ödendi işaretle')+'</button></td></tr>';
+  }).join('');
+  return '<header class="top"><div><h1>Üyeler</h1><p class="sub">Sorumlu ödemeyi tek tıkla işler. Liste '+list.length+' üye gösteriyor.</p></div></header>'+
+  '<div class="panel"><div class="tools"><input id="q" type="search" placeholder="Üye ara" aria-label="Üye ara" value="'+esc(q)+'">'+
+  '<select id="f" aria-label="Duruma göre filtrele"><option value="hepsi">Tüm üyeler</option><option value="odendi">Ödeyenler</option><option value="odenmedi">Ödemeyenler</option><option value="gecikmis">2+ gün gecikenler</option><option value="izinsiz">İzni veya aydınlatması eksik</option></select></div>'+
+  '<div class="scroll"><table><tr><th>Üye</th><th>Telefon</th><th class="r">Aidat</th><th>Vade</th><th>Durum</th><th>KVKK ve izin</th><th>İşlem</th></tr>'+rows+'</table></div>'+
+  '<div class="pager"><span>Sayfa '+(page+1)+' / '+pages+'</span><span><button class="btn ghost" data-page="-1" '+(page===0?'disabled':'')+'>Önceki</button> <button class="btn ghost" data-page="1" '+(page>=pages-1?'disabled':'')+'>Sonraki</button></span></div></div>';
+}
+function viewFinans(){
+  var s = stats();
+  var rows = expenses.map(function(e){ return '<tr><td>'+e.d+'</td><td>'+esc(e.cat)+'</td><td>'+esc(e.note)+'</td><td class="r">'+tl(e.amt)+'</td></tr>'; }).join('');
+  return '<header class="top"><div><h1>Gelir-Gider</h1><p class="sub">'+MONTH+' kasa durumu</p></div></header>'+
+  '<section class="cards"><div class="card"><div class="k">Aidat geliri</div><div class="v">'+tl(s.got)+'</div></div><div class="card"><div class="k">Toplam gider</div><div class="v">'+tl(s.spend)+'</div></div><div class="card hl"><div class="k">Net</div><div class="v">'+tl(s.net)+'</div></div></section>'+
+  '<div class="panel"><h2>Gider ekle</h2><form id="expForm" class="form"><input id="eNote" placeholder="Açıklama" required aria-label="Açıklama"><select id="eCat" aria-label="Kategori"><option>Elektrik</option><option>Su</option><option>Kira</option><option>Personel</option><option>Saha bakımı</option><option>Ekipman</option><option>Vergi</option><option>Diğer</option></select><input id="eAmt" type="number" min="1" placeholder="Tutar (₺)" required aria-label="Tutar"><button class="btn alt" type="submit">Gideri kaydet</button></form>'+
+  '<h2>Giderler</h2><div class="scroll"><table style="min-width:480px"><tr><th>Tarih</th><th>Kategori</th><th>Açıklama</th><th class="r">Tutar</th></tr>'+rows+'</table></div></div>';
+}
+function queue(){ return members.filter(function(m){ return status(m)==='late' && !m.reminded && m.wa; }); }
+function skipped(){ return members.filter(function(m){ return status(m)==='late' && !m.wa; }); }
+function viewHatirlatma(){
+  var qd = queue(), sent = members.filter(function(m){ return m.reminded; });
+  var rows = qd.slice(0,10).map(function(m){ return '<tr><td>'+esc(m.name)+'</td><td>'+m.phone+'</td><td class="r">'+tl(m.fee)+'</td><td><span class="pill late">'+(TODAY-m.due)+' gün gecikti</span></td></tr>'; }).join('');
+  var ex = qd[0] || members.filter(function(m){ return m.reminded; })[0];
+  var msg = ex ? 'Merhaba '+ex.name.split(' ')[0]+' Bey, '+MONTH.split(' ')[0].toLowerCase()+' ayı aidatınız ('+tl(ex.fee)+') '+(TODAY-ex.due)+' gündür gecikmiştir. Ödemenizi sahada veya IBAN’a yapabilirsiniz. Teşekkürler, Örnek Halı Saha' : 'Gönderilecek hatırlatma yok.';
+  return '<header class="top"><div><h1>Hatırlatmalar</h1><p class="sub">Vadesi 2 gün geçen ve ödemesi işlenmemiş üyelere WhatsApp mesajı gider.</p></div></header>'+
+  '<section class="cards"><div class="card hl"><div class="k">Gönderilmeyi bekleyen</div><div class="v">'+qd.length+'</div></div><div class="card"><div class="k">Bugün gönderilen</div><div class="v">'+sent.length+'</div></div><div class="card"><div class="k">WhatsApp izni olmadığı için atlanan</div><div class="v">'+skipped().length+'</div></div></section>'+
+  '<section class="two"><div class="panel"><h2>Sıradaki üyeler</h2><div class="scroll"><table style="min-width:440px"><tr><th>Üye</th><th>Telefon</th><th class="r">Tutar</th><th>Durum</th></tr>'+rows+'</table></div>'+
+  '<p class="sub">'+(qd.length>10?'İlk 10 üye gösteriliyor. ':'')+'</p><button class="btn alt" data-send="1" '+(qd.length?'':'disabled')+'>Hatırlatmaları gönder (demo)</button></div>'+
+  '<div class="panel"><h2>Mesaj önizleme</h2><div class="wa">'+esc(msg)+'</div><p class="sub">Gerçek kurulumda bu işlem her gün otomatik çalışır; demo gönderim yapmaz.</p></div></section>';
+}
+function viewKvkk(){
+  var noAy = members.filter(function(m){ return !m.aydin; }).length, noWa = members.filter(function(m){ return !m.wa; }).length;
+  var ret = [['Ad, soyad, telefon','Üyelik takibi ve iletişim','Üyelik süresi + 1 yıl, sonra silinir veya anonimleştirilir'],
+    ['Aidat ödeme kayıtları','Alacak takibi ve muhasebe','Mevzuattaki saklama süresi (genelde 10 yıl), işletmenin mali müşavirince doğrulanır'],
+    ['Gider kayıtları','Muhasebe ve vergi','Mevzuattaki saklama süresi (genelde 10 yıl)'],
+    ['WhatsApp izin kaydı','İznin ispatı','İzin süresince ve geri alındıktan sonra 1 yıl'],
+    ['Mesaj gönderim kayıtları','Hatırlatmanın kanıtı','1 yıl'],
+    ['Panel işlem kayıtları','Güvenlik ve denetim','2 yıl']].map(function(r){ return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td style="white-space:normal">'+r[2]+'</td></tr>'; }).join('');
+  return '<header class="top"><div><h1>KVKK ve Veri</h1><p class="sub">Üye verilerinin yasal yönetimi: aydınlatma, izin, saklama süresi ve haklar.</p></div></header>'+
+  '<section class="cards"><div class="card"><div class="k">Aydınlatma verilmeyen üye</div><div class="v">'+noAy+'</div></div><div class="card"><div class="k">WhatsApp izni olmayan üye</div><div class="v">'+noWa+'</div></div><div class="card hl"><div class="k">Mesaj gidebilecek üye</div><div class="v">'+(members.length-noWa)+'</div></div></section>'+
+  '<div class="panel"><h2>Saklama ve imha süreleri</h2><div class="scroll"><table style="min-width:600px"><tr><th>Veri</th><th>Amaç</th><th>Saklama süresi</th></tr>'+ret+'</table></div><p class="sub">Süreler önerilen başlangıç değerleridir. Kesin süreleri işletmenin avukatı ve mali müşaviri belirler, panel ayarlarından değiştirilir.</p></div>'+
+  '<section class="two"><div class="panel"><h2>Taraflar ve roller</h2><p><b>Veri sorumlusu:</b> halı saha işletmesi</p><p><b>Veri işleyen:</b> BY SİRİUS (panel ve barındırma hizmeti)</p><p class="sub">Aralarında veri işleme sözleşmesi bulunur. Aydınlatma metni işletme adına hazırlanır ve üye kaydında verilir.</p></div>'+
+  '<div class="panel"><h2>Üye hakları ve sunucu</h2><p><b>Talepler:</b> bilgi alma, düzeltme, silme ve WhatsApp iznini geri alma talepleri üye kartından işlenir. Yasal süre 30 gündür.</p><p><b>Barındırma:</b> veriler Avrupa bölgesindeki bulut sunucuda tutulur, yurt dışı aktarım aydınlatma metninde belirtilir.</p><p><b>Güvenlik:</b> şifreli bağlantı, yetkiye göre erişim, günlük yedek.</p></div></section>';
+}
+function render(){
+  var v = document.getElementById('view');
+  v.innerHTML = tab==='ozet' ? viewOzet() : tab==='uyeler' ? viewUyeler() : tab==='finans' ? viewFinans() : tab==='kvkk' ? viewKvkk() : viewHatirlatma();
+  document.getElementById('navBadge').textContent = queue().length;
+  document.querySelectorAll('nav button[data-tab]').forEach(function(b){ if (b.dataset.tab===tab) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
+  var f = document.getElementById('f'); if (f) f.value = filt;
+}
+document.addEventListener('click', function(e){
+  var t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.tab) { tab = t.dataset.tab; render(); }
+  else if (t.dataset.toggle) { var m = members[+t.dataset.toggle - 1]; m.paid = !m.paid; if (m.paid) m.reminded = false; render(); toast(m.name+': '+(m.paid?'Ödendi':'Ödenmedi')+' olarak işaretlendi'); }
+  else if (t.dataset.aydin) { var a = members[+t.dataset.aydin - 1]; a.aydin = !a.aydin; if (!a.aydin) a.wa = false; render(); toast(a.name+': aydınlatma '+(a.aydin?'verildi':'verilmedi')); }
+  else if (t.dataset.wa) { var w = members[+t.dataset.wa - 1]; if (!w.aydin && !w.wa) { toast('Önce aydınlatma metni verilmeli'); return; } w.wa = !w.wa; render(); toast(w.name+': WhatsApp izni '+(w.wa?'var':'yok')); }
+  else if (t.dataset.page) { page += +t.dataset.page; render(); }
+  else if (t.dataset.send) { var n = queue().length; queue().forEach(function(m){ m.reminded = true; }); render(); toast(n+' üyeye hatırlatma gönderildi (demo)'); }
+});
+document.addEventListener('input', function(e){ if (e.target.id==='q') { q = e.target.value; page = 0; var pos = e.target.selectionStart; render(); var el = document.getElementById('q'); el.focus(); el.setSelectionRange(pos,pos); } });
+document.addEventListener('change', function(e){ if (e.target.id==='f') { filt = e.target.value; page = 0; render(); } });
+document.addEventListener('submit', function(e){
+  e.preventDefault();
+  if (e.target.id==='expForm') {
+    var amt = +document.getElementById('eAmt').value;
+    if (!amt) return;
+    expenses.unshift({d:TODAY+' Kas', cat:document.getElementById('eCat').value, note:document.getElementById('eNote').value, amt:amt});
+    render(); toast('Gider kaydedildi');
+  }
+});
+document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+render();
+</script>
+
+</body>
+</html>
