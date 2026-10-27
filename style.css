@@ -57,7 +57,8 @@ section.alt{background:rgba(14,20,38,.55)}
 .brand:hover{transform:translateY(-6px);background:#23272a;box-shadow:0 20px 40px rgba(241,193,0,.08)}
 .brand .ico{width:64px;height:64px;border-radius:16px;background:var(--bg);display:grid;place-items:center;margin-bottom:20px;overflow:hidden}
 .brand .ico img{width:44px;height:44px;object-fit:contain}
-.ico.full img,.big img.full{width:100%;height:100%;padding:0;object-fit:cover}
+.ico.full img{width:100%;height:100%;padding:0;object-fit:cover}
+.big img.full{padding:0;object-fit:cover}
 .ico.light,.big img.light{background:#e8ecf5}
 .brand h3{font-size:1.35rem;margin-bottom:4px}
 .brand .dom{color:var(--violet);font-size:.82rem;font-weight:600}
@@ -138,8 +139,22 @@ footer a:hover{color:var(--gold)}
 
 /* BY Sirius: genis (yatay) logo, kare kutuya sigmaz */
 .logo img{height:44px}
-.brand .ico.wide{width:100%;height:84px;border-radius:16px;padding:6px 10px}
-.brand .ico.wide img{width:100%;height:100%;object-fit:contain}
-.demo .ico.wide{width:110px;height:54px;padding:4px 8px}
-.demo .ico.wide img{width:100%;height:100%}
-.big img.wide{width:112px;height:46px;padding:3px 6px}
+
+
+
+
+
+
+/* BY Sirius: yildiz isareti (kirpilmis) buyuk ve net */
+.brand .ico.star{background:#0b1230}
+.brand .ico img[src*="bysirius-star"]{width:100%;height:100%;padding:6px}
+.big img[src*="bysirius-star"]{padding:4px;background:#0b1230}
+.demo .ico img[src*="bysirius-star"]{width:44px;height:44px}
+.logo img[src*="bysirius-star"]{height:46px}
+.brand .ico img[src*="bysirius-star"]{padding:0;transform:scale(1.35)}
+.big img[src*="bysirius-star"]{padding:0;transform:scale(1.35);overflow:hidden}
+.big{overflow:hidden}
+.demo .ico img[src*="bysirius-star"]{width:100%;height:100%;transform:scale(1.35)}
+.logo img[src*="bysirius-star"]{height:56px;margin:-6px 0}
+.brand .ico img[src*="bysirius-star"],.demo .ico img[src*="bysirius-star"]{transform:scale(1.2)}
+.big img[src*="bysirius-star"]{transform:none;padding:2px}
