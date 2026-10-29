@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Köpek Eğitimi & Pansiyon – Dijital Rezervasyon Sistemi Teklifi</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;font-family:Inter,"Segoe UI",system-ui,sans-serif;color:#fff;background:#0b2e2c}
+.deck{position:fixed;inset:0 0 40px 0}
+.s{position:absolute;inset:0;padding:5vh 7vw;display:flex;flex-direction:column;justify-content:center;opacity:0;pointer-events:none;transform:translateX(60px);transition:opacity .6s,transform .6s;overflow:auto}
+.s.on{opacity:1;pointer-events:auto;transform:none}.s.prev{transform:translateX(-60px)}
+h1{max-width:68%;font-size:clamp(28px,4.4vw,58px);line-height:1.05;margin:0 0 14px;font-weight:900}h2{font-size:clamp(24px,3.6vw,44px);margin:0 0 18px;font-weight:900}
+p,li{font-size:clamp(15px,1.7vw,22px);line-height:1.5}.sub{opacity:.85;max-width:62%}
+.big{position:absolute;right:4vw;top:50%;transform:translateY(-50%);font-size:min(20vw,220px);opacity:.92;filter:drop-shadow(0 20px 30px #0005);animation:fl 5s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-54%) rotate(3deg)}}
+@media(max-width:700px){.big{opacity:.18}}
+.g{display:grid;gap:16px}.c2{grid-template-columns:repeat(2,1fr)}.c3{grid-template-columns:repeat(3,1fr)}.c4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:800px){.c3,.c4{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.c2,.c3,.c4{grid-template-columns:1fr}}
+.box{background:#ffffff1c;border:1px solid #fff3;border-radius:20px;padding:18px 20px;backdrop-filter:blur(6px)}
+.box .ic{font-size:40px}.box h3{margin:6px 0;font-size:clamp(17px,1.9vw,24px)}.box p{margin:0;font-size:clamp(13px,1.3vw,17px);opacity:.9}
+.bg1{background:linear-gradient(130deg,#0f5c57,#13a39a)}.bg2{background:linear-gradient(130deg,#4338ca,#6366f1)}.bg3{background:linear-gradient(130deg,#ea580c,#f59e0b)}.bg4{background:linear-gradient(130deg,#be185d,#ec4899)}.bg5{background:linear-gradient(130deg,#0b2e2c,#0f5c57)}.bg6{background:linear-gradient(130deg,#1e3a8a,#0ea5e9)}
+.nav{position:fixed;bottom:40px;right:18px;display:flex;gap:8px;z-index:20}
+.nav button{width:44px;height:44px;border-radius:50%;border:0;background:#ffffff33;color:#fff;font-size:20px;cursor:pointer;backdrop-filter:blur(6px)}.nav button:hover{background:#fff6}
+.prog{position:fixed;top:0;left:0;height:5px;background:#ffd166;z-index:30;transition:width .4s}
+.price{background:#fff;color:#14302e;border-radius:22px;padding:22px;position:relative}
+.price.hot{outline:4px solid #ffd166;transform:scale(1.03)}.price .badge{position:absolute;top:-12px;right:18px;background:#ffd166;color:#4a3000;font-weight:900;font-size:12px;padding:4px 12px;border-radius:99px}
+.price h3{margin:0;font-size:22px}.price .amt{font-size:clamp(26px,3vw,38px);font-weight:900;color:#0f5c57;margin:8px 0 0}.price small{color:#667}
+.price ul{padding-left:18px;margin:10px 0 0}.price li{font-size:clamp(12px,1.2vw,15px);line-height:1.45;margin:2px 0}
+.tbl{width:100%;border-collapse:collapse;background:#ffffff18;border-radius:16px;overflow:hidden}.tbl td,.tbl th{padding:10px 14px;text-align:left;font-size:clamp(13px,1.4vw,18px);border-bottom:1px solid #fff2}
+.cta{display:inline-block;background:#ffd166;color:#3b2a00;font-weight:900;padding:14px 26px;border-radius:99px;text-decoration:none;font-size:clamp(15px,1.8vw,22px);margin:6px 8px 6px 0}
+.cta.w{background:#25d366;color:#fff}
+.mock{background:#fff;color:#1d2b2a;border-radius:18px;padding:14px;box-shadow:0 20px 50px #0006}.mock .bar{height:10px;border-radius:5px;background:#e6dfd0;margin:6px 0}
+.mock .cl{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.mock .cl i{height:22px;border-radius:5px;background:#dcfce7}.mock .cl i.b{background:#fecaca}.mock .cl i.w{background:#fde68a}
+.wa{background:#dcf8c6;color:#1d2b2a;padding:12px 14px;border-radius:12px 12px 12px 2px;font-size:clamp(12px,1.3vw,16px);white-space:pre-line}
+
+h1{font-family:Fraunces,Georgia,serif;font-weight:700;letter-spacing:-.01em}
+h2,h3,.cta,.amt,th,.tbl b{font-family:Outfit,Inter,sans-serif}
+svg.lucide{width:1.1em;height:1.1em;stroke-width:2;vertical-align:-.18em}
+.box{transition:transform .25s,background .25s,box-shadow .25s,border-color .25s}
+.box:hover{transform:translateY(-6px);background:#ffffff2e;border-color:#fff7;box-shadow:0 18px 40px #0004}
+.box .ic{width:58px;height:58px;border-radius:16px;background:#ffffff2a;display:flex;align-items:center;justify-content:center;margin-bottom:6px;transition:transform .3s,background .3s}
+.box .ic svg{width:30px;height:30px}.box:hover .ic{transform:rotate(-8deg) scale(1.08);background:#ffd166;color:#3b2a00}
+.price{transition:transform .25s,box-shadow .25s}.price:hover{transform:translateY(-8px);box-shadow:0 24px 50px #0006}.price.hot:hover{transform:scale(1.03) translateY(-8px)}
+.cta{transition:transform .2s,box-shadow .2s}.cta:hover{transform:translateY(-3px);box-shadow:0 10px 24px #0005}
+.nav button{display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s}.nav button:hover{transform:scale(1.1)}
+.tbl tr{transition:background .2s}.tbl tr:hover td{background:#ffffff14}
+.num{display:inline-flex;width:44px;height:44px;border-radius:14px;background:#ffd166;color:#3b2a00;font:800 22px Outfit;align-items:center;justify-content:center}
+.s.photo::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,#072c2af2 0%,#072c2ad0 45%,#072c2a55 100%),var(--img) center/cover;z-index:0;animation:kb 14s ease-out forwards}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.08)}}
+.s.photo>*{position:relative;z-index:1}.s.photo{overflow:hidden}
+.logo-line{display:flex;align-items:center;gap:12px;font:800 clamp(14px,1.5vw,20px) Outfit;letter-spacing:.5px}
+.logo-line .m{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#ffd166,#ff7a59);color:#3b2a00;display:flex;align-items:center;justify-content:center}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}@media(max-width:800px){.two{grid-template-columns:1fr}}
+.tl{border-left:3px solid #ffd166;padding-left:16px;display:grid;gap:12px}.tl b{font-family:Outfit}.tl p{margin:0;font-size:clamp(13px,1.3vw,17px)}
+.ck{list-style:none;padding:0;margin:0;display:grid;gap:6px}.ck li{display:flex;gap:10px;align-items:flex-start;font-size:clamp(13px,1.35vw,18px);line-height:1.35}.ck svg{color:#ffd166;margin-top:2px;flex:none}
+
+.repnote{position:absolute;left:7vw;bottom:46px;font:500 11px Inter,sans-serif;opacity:.7;z-index:3}
+.pg{height:clamp(150px,30vh,300px);border-radius:20px;background:#0d4a46 center/cover;position:relative;overflow:hidden;box-shadow:0 18px 40px #0005;transition:transform .3s}
+.pg:hover{transform:translateY(-6px) scale(1.02)}.pg span{position:absolute;inset:auto 0 0 0;padding:30px 14px 12px;background:linear-gradient(transparent,#072c2acc);font:700 clamp(13px,1.3vw,17px) Outfit}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div class="deck" id="deck">
+
+<!-- 1 -->
+<section class="s bg1 on photo" style="--img:url(img/hero-golden.jpg)">
+ <div class="logo-line" style="margin-bottom:18px"><span class="m">🐾</span><span>BY SIRIUS GROUP • AI &amp; TECH</span></div><div class="repnote">Görseller temsilidir.</div>
+ <div style="font-weight:800;letter-spacing:3px;opacity:.85">DİJİTAL DÖNÜŞÜM TEKLİFİ</div>
+ <h1>Köpek Eğitimi & Pansiyon<br>için Akıllı Rezervasyon Sistemi</h1>
+ <p class="sub">Web sitesi • Online rezervasyon paneli • Müşteri kartları • Ödeme • Mağaza • AI asistan • Otomatik mesajlar</p>
+ <p style="margin-top:22px;opacity:.8">Hazırlayan: <b>FİRMA_AD</b> • <a class="cta" style="padding:6px 16px;font-size:15px" href="#" data-tel>TELEFON</a></p>
+</section>
+
+<!-- 2 -->
+<section class="s bg5"><h2>Bugün yaşanan sorunlar 😓</h2>
+ <div class="g c3">
+  <div class="box"><div class="ic">📞</div><h3>Telefon trafiği</h3><p>Rezervasyonlar WhatsApp ve telefonla; kayıtlar defterde ve dağınık.</p></div>
+  <div class="box"><div class="ic">❓</div><h3>Doluluk belirsizliği</h3><p>Hangi oda, hangi saat boş? Çifte rezervasyon ve boş kalan odalar.</p></div>
+  <div class="box"><div class="ic">📝</div><h3>Köpek bilgileri kayıp</h3><p>Alerji, ilaç saati, aşı tarihi ve özel notlar kâğıtlarda kalıyor.</p></div>
+  <div class="box"><div class="ic">💸</div><h3>Kapora takibi zor</h3><p>Son dakika iptaller, ödenmeyen kaporalar, gelir-gider karmaşası.</p></div>
+  <div class="box"><div class="ic">🌙</div><h3>Mesai dışı kayıp</h3><p>Gece gelen müşteri talepleri cevapsız kalıp rakibe gidiyor.</p></div>
+  <div class="box"><div class="ic">🛒</div><h3>Ek gelir yok</h3><p>Mama, aksesuar gibi ürünler için online satış kanalı yok.</p></div>
+ </div></section>
+
+<!-- 3 -->
+<section class="s bg2"><h2>Çözüm: Tek platformda her şey ✨</h2>
+ <div class="g c4">
+  <div class="box"><div class="ic">🌐</div><h3>Kurumsal web sitesi</h3><p>Mobil uyumlu, slaytlı, SEO'lu vitrin.</p></div>
+  <div class="box"><div class="ic">📅</div><h3>Rezervasyon paneli</h3><p>Gün & saat bazlı canlı doluluk, talep ve onay.</p></div>
+  <div class="box"><div class="ic">🐶</div><h3>Müşteri kartları</h3><p>Cins, kilo, aşı, alerji, özel notlar, tarihçe.</p></div>
+  <div class="box"><div class="ic">💳</div><h3>Online ödeme</h3><p>PayTR / iyzico ile kapora veya tam ödeme.</p></div>
+  <div class="box"><div class="ic">🛍️</div><h3>Online mağaza</h3><p>Mama, aksesuar, bakım ürünleri satışı.</p></div>
+  <div class="box"><div class="ic">🤖</div><h3>AI asistan + WhatsApp</h3><p>7/24 soru-cevap ve tek tıkla destek.</p></div>
+  <div class="box"><div class="ic">✉</div><h3>Otomatik mesajlar</h3><p>Onay, hatırlatma, iptal, kampanya maili.</p></div>
+  <div class="box"><div class="ic">📊</div><h3>Yönetim paneli</h3><p>Gelir-gider, doluluk, müşteri geçmişi.</p></div>
+ </div></section>
+
+<!-- 3b -->
+<section class="s bg1"><h2>Mutlu patiler, mutlu insanlar</h2>
+ <p class="sub" style="margin-top:0">Sitenin ve panelin her noktasında köpek, sahip, eğitmen ve oda görselleri. İşletmenin telefonla çektiği ya da müşterinin gönderdiği fotoğraflar yapay zekâ ile profesyonel hale getirilir.</p>
+ <div class="g c3" style="margin-top:12px">
+  <div class="pg" style="background-image:url(img/people-1.jpg)"><span>Pamuk ve sahibi</span></div>
+  <div class="pg" style="background-image:url(img/hero-kangal.jpg)"><span>Kangal ile yürüyüş</span></div>
+  <div class="pg" style="background-image:url(img/people-3.jpg)"><span>Aile ziyareti</span></div>
+ </div><div class="repnote">Görseller temsilidir.</div></section>
+
+<!-- 4 -->
+<section class="s bg6"><h2>Web sitesi 🌐</h2>
+ <div class="g c2" style="align-items:center">
+  <div><ul><li>Kayan slaytlı, profesyonel vitrin sayfası</li><li>Hizmetler, odalar, fiyatlar, galeri, yorumlar</li><li>Mobil, tablet, masaüstü uyumlu</li><li>Google'da bulunma için SEO altyapısı</li><li>Her sayfada <b>WhatsApp</b> ve <b>AI asistan</b> butonu</li><li>Tek tıkla rezervasyon paneline geçiş</li></ul></div>
+  <div class="mock"><div style="height:110px;border-radius:12px;background:linear-gradient(120deg,#0f5c57,#13a39a);display:flex;align-items:center;justify-content:space-between;padding:0 18px;color:#fff"><b style="font-size:18px">Sevimli dostunuz<br>güvenli ellerde</b><span style="font-size:54px">🐕</span></div><div class="g c3" style="margin-top:10px;gap:8px"><div class="bar" style="height:44px"></div><div class="bar" style="height:44px"></div><div class="bar" style="height:44px"></div></div><div class="bar"></div><div class="bar" style="width:60%"></div></div>
+ </div></section>
+
+<!-- 5 -->
+<section class="s bg3"><h2>Canlı rezervasyon takvimi 📅</h2>
+ <div class="g c2" style="align-items:center">
+  <div><ul><li><b>Otel odası</b>: gün bazlı doluluk</li><li><b>Oyun alanı / bakım odası</b>: saat bazlı doluluk</li><li>Müşteri boş yeri görür, talep gönderir</li><li>İşletme onaylar → müşteriye otomatik mesaj</li><li>Çifte rezervasyon <b>imkânsız</b></li><li>Kapora veya tam ödeme anında tahsil edilir</li></ul></div>
+  <div class="mock"><b style="font-size:13px">Doluluk (örnek)</b><div class="cl" style="margin-top:8px"><i></i><i class="b"></i><i class="b"></i><i class="w"></i><i></i><i></i><i class="b"></i><i class="b"></i><i></i><i></i><i class="w"></i><i class="b"></i><i></i><i></i><i></i><i class="b"></i><i class="b"></i><i class="b"></i><i></i><i></i><i class="w"></i></div><div style="font-size:11px;margin-top:8px">🟩 Boş &nbsp; 🟨 Onay bekliyor &nbsp; 🟥 Dolu</div></div>
+ </div></section>
+
+<!-- 6 -->
+<section class="s bg4"><h2>Müşteri & köpek kartları 🐶</h2>
+ <div class="g c2" style="align-items:center">
+  <div><ul><li>Cins, yaş, kilo, cinsiyet</li><li>Aşı tarihleri ve alerjiler (kırmızı uyarı)</li><li>Özel notlar: ilaç saati, davranış, beslenme</li><li>Geçmiş hizmetler ve harcama tarihçesi</li><li>Hızlı arama, tek tıkla WhatsApp / kampanya</li></ul></div>
+  <div class="mock"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:48px">🐕</div><div><b>Pamuk</b> <span style="font-size:12px;background:#0f5c5720;padding:2px 8px;border-radius:9px">Golden Retriever</span><div style="font-size:12px;margin-top:4px">29 kg • 3 yaş • 💉 03/2026 • <span style="color:#b91c1c">⚠ Tavuk alerjisi</span></div></div></div><div class="bar" style="margin-top:10px"></div><div class="bar" style="width:70%"></div></div>
+ </div></section>
+
+<!-- 7 -->
+<section class="s bg1"><h2>Otomatik mesajlar ✉ (WhatsApp • SMS • E-posta)</h2>
+ <div class="g c3">
+  <div><div class="wa">Merhaba Ayşe 🐾
+Pamuk için rezervasyonunuz ONAYLANDI ✅
+📍 VIP Süit 1
+🗓 2 Kas → 6 Kas</div><p style="margin:8px 0 0;font-size:15px">Onay mesajı</p></div>
+  <div><div class="wa">Yarın Pamuk için VIP Süit 1 rezervasyonunuz var 👋
+Değişiklik için bu mesaja yanıt verin.</div><p style="margin:8px 0 0;font-size:15px">24 saat önce hatırlatma</p></div>
+  <div><div class="wa">🎁 Sonbahar fırsatı!
+3 gece pansiyona %15 indirim + ücretsiz tımar. Kod: SONBAHAR15</div><p style="margin:8px 0 0;font-size:15px">Kampanya / satış maili</p></div>
+ </div>
+ <p style="margin-top:14px">Ayrıca: <b>iptal bildirimi</b>, <b>ödeme makbuzu</b>, <b>sipariş/kargo bilgisi</b> otomatik gider. Metinleri işletme sahibi panelden düzenler.</p></section>
+
+<!-- 8 -->
+<section class="s bg2"><h2>Ödeme & online mağaza 💳🛍️</h2>
+ <div class="g c2">
+  <div class="box"><div class="ic">💳</div><h3>PayTR / iyzico entegrasyonu</h3><p>Kapora (%30 vb.) ya da hizmetin tamamı online tahsil edilir. 3D Secure, taksit, otomatik makbuz, iade yönetimi.</p></div>
+  <div class="box"><div class="ic">🛍️</div><h3>Pati Mağaza</h3><p>Mama, oyuncak, tasma, yatak, bakım ürünleri. Stok takibi, sepet, kargo bildirimi. Yeni gelir kanalı.</p></div>
+ </div></section>
+
+<!-- 9 -->
+<section class="s bg5"><h2>İşletme sahibi paneli 📊</h2>
+ <div class="g c4">
+  <div class="box"><div class="ic">💰</div><h3>Gelir - Gider</h3><p>Aylık grafik, kategori kırılımı, net kâr.</p></div>
+  <div class="box"><div class="ic">🗓</div><h3>Doluluk</h3><p>Günlük % doluluk, giriş/çıkış listesi.</p></div>
+  <div class="box"><div class="ic">👥</div><h3>Müşteri tarihçesi</h3><p>Kim, ne zaman, ne kadar harcadı.</p></div>
+  <div class="box"><div class="ic">🔔</div><h3>Onay bekleyenler</h3><p>Tek tıkla onayla / reddet.</p></div>
+ </div>
+ <div style="margin-top:18px"><a class="cta" data-panel="musteri" href="#" target="_blank">Müşteri Panelini Aç</a><a class="cta w" data-panel="isletme" href="#" target="_blank">İşletme Panelini Aç</a></div><p style="font-size:14px;opacity:.8;margin-top:6px">Canlı demo yeni sekmede açılır.</p></section>
+
+<!-- 10 -->
+<section class="s bg6"><h2>Kurulum süreci 🚀 (≈ 3–5 hafta)</h2>
+ <div class="g c4">
+  <div class="box"><div class="ic"><span class="num">1</span></div><h3>Analiz</h3><p>Oda/hizmet/fiyat yapısı, marka ve içerikler.</p></div>
+  <div class="box"><div class="ic"><span class="num">2</span></div><h3>Tasarım & yasal metinler</h3><p>Arayüz onayı; KVKK, gizlilik, çerez ve mesafeli satış metinlerinin hazırlanması.</p></div>
+  <div class="box"><div class="ic"><span class="num">3</span></div><h3>Geliştirme</h3><p>Entegrasyonlar: ödeme, mesaj, WhatsApp, AI.</p></div>
+  <div class="box"><div class="ic"><span class="num">4</span></div><h3>Yayın & Eğitim</h3><p>Test, personel eğitimi, canlıya alma.</p></div>
+ </div></section>
+
+<!-- 10b -->
+<section class="s bg5"><h2>Yasal sayfalar & iş planı ⚖</h2>
+ <div class="two">
+  <div class="box"><h3 style="margin-top:0">Sitenin ve panelin tüm sayfalarına eklenir</h3>
+   <ul class="ck">
+    <li>✔ KVKK Aydınlatma Metni ve açık rıza</li>
+    <li>✔ Gizlilik Politikası</li>
+    <li>✔ Çerez Politikası ve çerez onay çubuğu</li>
+    <li>✔ Mesafeli Satış Sözleşmesi ve Ön Bilgilendirme Formu</li>
+    <li>✔ İptal, İade ve Kapora Koşulları</li>
+    <li>✔ Kullanım Şartları</li>
+    <li>✔ Ticari ileti (SMS / e-posta / WhatsApp) izni</li>
+   </ul>
+   <p style="font-size:clamp(12px,1.1vw,15px);opacity:.85;margin:12px 0 0">Her sayfanın altında bağlantı olarak yer alır; rezervasyon ve ödeme adımında müşteri onayı alınır. Metinleri işletmenin bilgileriyle hazırlarız, nihai hukuki onay işletmenin hukuk danışmanındadır.</p></div>
+  <div class="box"><h3 style="margin-top:0">İş planı</h3>
+   <div class="tl">
+    <div><b>Hafta 1 – Analiz</b><p>Oda, hizmet, fiyat yapısı; marka bilgileri; işletmeden alınan fotoğraflar.</p></div>
+    <div><b>Hafta 2 – Tasarım & yasal metinler</b><p>Arayüz onayı, yasal sayfa taslakları.</p></div>
+    <div><b>Hafta 3–4 – Geliştirme</b><p>Rezervasyon, ödeme, mesaj ve AI entegrasyonları.</p></div>
+    <div><b>Hafta 5 – Test & yayın</b><p>Personel eğitimi, canlıya alma, ilk ay yakın destek.</p></div>
+    <div><b>Sonrası – Aylık bakım</b><p>Güncelleme, yedekleme, güvenlik ve teknik destek.</p></div>
+   </div></div>
+ </div></section>
+
+<!-- 11 -->
+<section class="s bg1"><h2>Fiyatlandırma 💎</h2>
+ <div class="g c3" style="align-items:stretch">
+  <div class="price"><h3>Başlangıç</h3><small>Vitrin + rezervasyon talebi</small><div class="amt">25.000 ₺ <small>kurulum</small></div><div style="font-weight:800">1.490 ₺ <small>/ ay bakım</small></div>
+   <ul><li>Kurumsal web sitesi (slaytlı)</li><li>Gün & saat bazlı doluluk takvimi</li><li>Rezervasyon talebi + onay paneli</li><li>Müşteri & köpek kartları</li><li>WhatsApp destek butonu</li><li>Onay / iptal e-postası</li><li>Yasal sayfalar (KVKK, gizlilik, çerez, iade)</li></ul></div>
+  <div class="price hot"><div class="badge">EN ÇOK TERCİH</div><h3>Profesyonel</h3><small>Satış + ödeme + otomasyon</small><div class="amt">39.000 ₺ <small>kurulum</small></div><div style="font-weight:800">2.490 ₺ <small>/ ay bakım</small></div>
+   <ul><li><b>Başlangıç'taki her şey</b></li><li>PayTR / iyzico kapora & tam ödeme</li><li>WhatsApp + SMS + e-posta otomasyonu</li><li>Hatırlatma, ödeme makbuzu, kampanya maili</li><li>Gelir-gider ve müşteri tarihçesi paneli</li><li>Mesafeli satış sözleşmesi & ön bilgilendirme</li><li>Kopyalama koruması + SSL</li></ul></div>
+  <div class="price"><h3>Premium</h3><small>Tam dijital işletme</small><div class="amt">59.000 ₺ <small>kurulum</small></div><div style="font-weight:800">3.990 ₺ <small>/ ay bakım</small></div>
+   <ul><li><b>Profesyonel'deki her şey</b></li><li>Online mağaza (stok, sepet, kargo)</li><li>AI asistan (7/24 soru-cevap)</li><li>Gelişmiş raporlar & doluluk analizi</li><li>Öncelikli destek + aylık güncelleme</li><li>AI ile fotoğraf iyileştirme (işletmenin gönderdiği fotoğraflar)</li></ul></div>
+ </div></section>
+
+<!-- 12 -->
+<section class="s bg3"><h2>Ek bilgiler ve ödeme planı 🧾</h2>
+ <table class="tbl"><tr><th>Kalem</th><th>Açıklama</th></tr>
+  <tr><td><b>Ödeme planı</b></td><td>%50 sözleşmede • %30 tasarım onayında • %20 yayında</td></tr>
+  <tr><td><b>Yasal sayfalar</b></td><td>KVKK, gizlilik, çerez, mesafeli satış, iade ve kullanım şartları tüm paketlere dahildir; nihai hukuki onay işletmenin hukuk danışmanındadır</td></tr>
+  <tr><td><b>Fotoğraflar</b></td><td>İşletmenin telefonla çektiği veya müşterinin gönderdiği fotoğraflar yapay zekâ ile iyileştirilip siteye yerleştirilir. Yerinde profesyonel fotoğraf çekimi kapsam dışıdır; istenirse ayrıca fiyatlandırılır. Tanıtım görselleri temsilidir.</td></tr>
+  <tr><td><b>Aylık bakım kapsamı</b></td><td>Barındırma, SSL, yedekleme, güvenlik, hata düzeltme, teknik destek</td></tr>
+  <tr><td><b>İlk yıl peşin</b></td><td>12 aylık bakım peşin ödenirse 2 ay hediye</td></tr>
+  <tr><td><b>Ayrı ücret</b></td><td>Alan adı (~500 ₺/yıl), SMS kontör, PayTR/iyzico işlem komisyonu (sağlayıcıya ödenir), WhatsApp API kullanımı</td></tr>
+  <tr><td><b>Teklif geçerliliği</b></td><td>30 gün • Fiyatlar KDV dahil nihai tutarlardır, ek KDV uygulanmaz</td></tr></table></section>
+
+<!-- 13 -->
+<section class="s bg4 photo" style="--img:url(img/hero-kangal.jpg)"><h1>Başlayalım mı?</h1><div class="repnote">Görseller temsilidir.</div>
+ <p class="sub">Demo panelini birlikte inceleyelim; markanıza özel tasarımı hemen hazırlayalım.</p>
+ <div style="margin-top:20px"><a class="cta" href="#" data-tel>📞 TELEFON</a><a class="cta w" href="#" data-wa>💬 WhatsApp</a></div>
+ <p style="margin-top:14px;font-weight:800" id="vn"></p></section>
+</div>
+
+<div class="nav"><button onclick="step(-1)">‹</button><button onclick="step(1)">›</button></div>
+<script src="config.js"></script>
+<script src="emo.js"></script>
+<script src="protect.js"></script>
+<script>
+const V=window.VENDOR;
+document.querySelectorAll('[data-panel]').forEach(a=>a.href=(window.PANEL_URL||'panel.html')+'#'+a.dataset.panel);
+{const d=document.getElementById('deck'),w=[...d.querySelectorAll('.wa')].map(n=>n.innerHTML);iconize(d);d.querySelectorAll('.wa').forEach((n,i)=>n.innerHTML=w[i]);}
+document.querySelectorAll('[data-tel]').forEach(a=>{a.href='tel:+'+V.phoneRaw;if(a.textContent.trim()==='TELEFON'||a.textContent.includes('TELEFON'))a.innerHTML=a.textContent.replace('TELEFON',V.phone)});
+document.querySelectorAll('[data-wa]').forEach(a=>{a.href='https://wa.me/'+V.phoneRaw;a.target='_blank'});
+document.querySelectorAll('.s b,.s p').forEach(n=>{if(n.textContent.includes('FİRMA_AD'))n.innerHTML=n.innerHTML.replace('FİRMA_AD','<a href="https://wa.me/'+V.phoneRaw+'" target="_blank" style="color:#ffd166">'+V.name+'</a>')});
+document.getElementById('vn').innerHTML='<a href="https://wa.me/'+V.phoneRaw+'" target="_blank" style="color:#fff">'+V.name+'</a> • <a href="https://'+V.web+'" target="_blank" style="color:#ffd166">'+V.web+'</a>';
+const S=[...document.querySelectorAll('.s')];let i=0;
+function show(n){i=Math.max(0,Math.min(S.length-1,n));S.forEach((s,k)=>{s.classList.toggle('on',k===i);s.classList.toggle('prev',k<i)});document.getElementById('prog').style.width=((i+1)/S.length*100)+'%'}
+function step(d){show(i+d)}
+document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key))step(1);if(['ArrowLeft','PageUp'].includes(e.key))step(-1)});
+let x0;document.addEventListener('touchstart',e=>x0=e.touches[0].clientX);document.addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>50)step(d<0?1:-1)});
+setInterval(()=>{},1e9);show(0);
+</script>
+</body>
+</html>

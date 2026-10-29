@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Pati Vadisi – Rezervasyon Paneli (Demo)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<style>
+:root{--pri:#0f5c57;--pri2:#13807a;--acc:#f59e0b;--acc2:#ff7a59;--bg:#f6f1e7;--card:#fff;--ink:#1d2b2a;--mut:#6b7b79;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--line:#e6dfd0;--r:16px}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+button{font-family:inherit;cursor:pointer}
+.top{position:sticky;top:0;z-index:50;background:var(--pri);color:#fff;display:flex;align-items:center;gap:14px;padding:10px 18px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:20px;display:flex;gap:8px;align-items:center}
+.modes{display:flex;gap:6px;margin-left:auto;background:#0003;padding:4px;border-radius:999px}
+.modes button{border:0;background:transparent;color:#fff;padding:8px 16px;border-radius:999px;font-weight:700}
+.modes button.on{background:var(--acc);color:#2a1a00}
+.demo-tag{font-size:11px;background:#fff2;padding:3px 8px;border-radius:99px}
+main{max-width:1280px;margin:0 auto;padding:18px}
+.layout{display:grid;grid-template-columns:220px 1fr;gap:18px}
+@media(max-width:860px){.layout{grid-template-columns:1fr}}
+.side{background:var(--card);border-radius:var(--r);padding:10px;height:fit-content;box-shadow:0 2px 10px #0001}
+.side button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:11px 14px;border-radius:10px;font-weight:700;color:var(--ink);font-size:15px}
+.side button:hover{background:#0f5c5712}.side button.on{background:var(--pri);color:#fff}
+@media(max-width:860px){.side{display:flex;overflow:auto}.side button{white-space:nowrap;width:auto}}
+.card{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:0 2px 10px #0001;margin-bottom:16px}
+h1,h2,h3{margin:0 0 10px}h2{font-size:22px}h3{font-size:17px}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:860px){.g3,.g4{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}}
+@media(max-width:520px){.g3,.g4{grid-template-columns:1fr}}
+.kpi{border-radius:var(--r);padding:16px;color:#fff}.kpi b{font-size:26px;display:block}.kpi small{opacity:.85}
+.k1{background:linear-gradient(135deg,#13807a,#0f5c57)}.k2{background:linear-gradient(135deg,#f59e0b,#ea580c)}.k3{background:linear-gradient(135deg,#6366f1,#4338ca)}.k4{background:linear-gradient(135deg,#ec4899,#be185d)}
+.btn{border:0;background:var(--pri);color:#fff;padding:10px 18px;border-radius:10px;font-weight:800;font-size:14px}
+.btn:hover{filter:brightness(1.1)}.btn.acc{background:var(--acc);color:#2a1a00}.btn.bad{background:var(--bad)}.btn.ghost{background:#0f5c5714;color:var(--pri)}.btn.sm{padding:6px 12px;font-size:12px}
+.pill{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:800}
+.p-ok{background:#dcfce7;color:#166534}.p-wait{background:#fef3c7;color:#92400e}.p-bad{background:#fee2e2;color:#991b1b}.p-info{background:#e0e7ff;color:#3730a3}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}th{color:var(--mut);font-size:12px;text-transform:uppercase}
+input,select,textarea{font-family:inherit;font-size:14px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#fff;width:100%}
+label{font-size:12px;font-weight:800;color:var(--mut);display:block;margin:8px 0 3px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.cal{overflow:auto;border:1px solid var(--line);border-radius:12px}
+.cal table{min-width:760px}.cal td,.cal th{text-align:center;padding:4px;border:1px solid var(--line)}
+.cal td.rn{text-align:left;font-weight:800;white-space:nowrap;background:#faf7ef;position:sticky;left:0}
+.cell{height:30px;min-width:38px;border-radius:7px;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:800}
+.c-free{background:#dcfce7;color:#166534}.c-free:hover{outline:2px solid var(--ok)}.c-busy{background:#fecaca;color:#7f1d1d;cursor:not-allowed}.c-wait{background:#fde68a;color:#78350f;cursor:not-allowed}.c-sel{background:var(--pri);color:#fff}
+.legend span{display:inline-flex;align-items:center;gap:5px;margin-right:14px;font-size:12px}.legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+.dogcard{display:flex;gap:14px;align-items:flex-start}
+.dogcard .av{width:84px;height:84px;border-radius:50%;flex:none;overflow:hidden;background:#fde7c2;display:flex;align-items:center;justify-content:center}
+.tag{display:inline-block;background:#0f5c5712;color:var(--pri);padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700;margin:2px 3px 0 0}
+.tag.red{background:#fee2e2;color:#991b1b}
+.modal-bg{position:fixed;inset:0;background:#000a;z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:#fff;border-radius:20px;max-width:560px;width:100%;max-height:88vh;overflow:auto;padding:22px;position:relative}
+.modal .x{position:absolute;right:14px;top:10px;border:0;background:transparent;font-size:24px}
+.wa{background:#dcf8c6;border-radius:12px 12px 12px 2px;padding:12px 14px;white-space:pre-line;font-size:14px;box-shadow:0 1px 2px #0002}
+.mail{border:1px solid var(--line);border-radius:12px;padding:14px;white-space:pre-line;font-size:14px;background:#fafafa}
+.toast{position:fixed;right:18px;bottom:60px;background:#111;color:#fff;padding:12px 18px;border-radius:12px;z-index:10001;max-width:340px;font-weight:700;animation:in .3s}
+@keyframes in{from{transform:translateY(20px);opacity:0}}
+/* site */
+.hero{position:relative;border-radius:24px;overflow:hidden;height:380px;color:#fff;margin-bottom:18px}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:40px 54px;opacity:0;transition:opacity .8s}
+.slide.on{opacity:1}.slide h1{font-size:40px;max-width:560px;line-height:1.1}.slide p{max-width:480px;font-size:17px}
+.slide .big{position:absolute;right:50px;top:50%;transform:translateY(-50%);font-size:170px;opacity:.9;filter:drop-shadow(0 10px 20px #0004)}
+@media(max-width:640px){.slide{padding:26px}.slide h1{font-size:27px}.slide .big{font-size:90px;opacity:.35}}
+.dots{position:absolute;bottom:14px;left:0;right:0;display:flex;gap:8px;justify-content:center;z-index:2}.dots i{width:10px;height:10px;border-radius:50%;background:#fff6;cursor:pointer}.dots i.on{background:#fff}
+.svc{text-align:center}.svc .ic{font-size:44px}
+.prod{text-align:center}.prod .pic{height:110px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:54px;margin-bottom:8px}
+.fab{position:fixed;right:18px;bottom:62px;z-index:9000;display:flex;flex-direction:column;gap:10px}
+.fab button{width:56px;height:56px;border-radius:50%;border:0;font-size:26px;box-shadow:0 6px 18px #0005;color:#fff}
+.chat{position:fixed;right:84px;bottom:62px;width:330px;max-width:calc(100vw - 100px);background:#fff;border-radius:18px;box-shadow:0 10px 40px #0005;z-index:9001;overflow:hidden;display:none}
+.chat.on{display:block}.chat header{background:var(--pri);color:#fff;padding:12px 16px;font-weight:800}
+.msgs{height:260px;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:#faf8f2}
+.m{max-width:85%;padding:8px 12px;border-radius:12px;font-size:14px}.m.b{background:#fff;border:1px solid var(--line)}.m.u{background:var(--pri);color:#fff;align-self:flex-end}
+.bars{display:flex;align-items:flex-end;gap:12px;height:170px;padding-top:10px}
+.bars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;height:100%}
+.bars .b1,.bars .b2{width:100%;border-radius:6px 6px 0 0;min-height:3px}.bars .b1{background:var(--pri2)}.bars .b2{background:var(--acc2)}
+.bars small{font-size:11px;color:var(--mut)}
+.occ{height:10px;background:#eee;border-radius:99px;overflow:hidden}.occ i{display:block;height:100%;background:linear-gradient(90deg,var(--pri2),var(--acc))}
+
+h1,h2,h3,.logo,.btn,.kpi b,.modes button,.side button,.pill,th,.amt{font-family:Outfit,Inter,system-ui,sans-serif}
+.slide h1,.hero-t{font-family:Fraunces,Georgia,serif;font-weight:700;letter-spacing:-.01em}
+svg.lucide{width:1.15em;height:1.15em;stroke-width:2;vertical-align:-.2em;flex:none}
+.card{transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 34px #0f5c5726}
+.btn{transition:transform .15s,box-shadow .2s,filter .2s;box-shadow:0 2px 0 #0003}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px #0f5c5733;filter:brightness(1.08)}.btn:active{transform:none}
+.side button{transition:background .2s,padding-left .2s,color .2s;display:flex;gap:10px;align-items:center}.side button:hover{padding-left:20px}
+tbody tr,table tr{transition:background .15s}table tr:hover td{background:#0f5c570b}
+.kpi{transition:transform .25s,box-shadow .25s;box-shadow:0 8px 22px #0f5c5722;position:relative;overflow:hidden}.kpi:hover{transform:translateY(-4px) scale(1.01)}.kpi::after{content:"";position:absolute;right:-30px;top:-30px;width:110px;height:110px;border-radius:50%;background:#fff2}
+.modes button{display:flex;gap:7px;align-items:center;transition:background .2s,transform .15s}.modes button:hover:not(.on){background:#fff3}
+.top{box-shadow:0 4px 20px #0f5c5740}
+.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:flex;align-items:center;justify-content:center;color:#2a1a00}
+.fab button{display:flex;align-items:center;justify-content:center;transition:transform .2s}.fab button:hover{transform:scale(1.1) rotate(-6deg)}
+.cell{transition:transform .12s,box-shadow .12s}.c-free:hover{transform:scale(1.12);box-shadow:0 4px 10px #16a34a55}
+/* foto slayt */
+.hero{height:440px;box-shadow:0 20px 50px #0f5c5740}
+.slide{padding:0;display:block}
+.slide .bgimg{position:absolute;inset:0;background-size:cover;background-position:center 55%;background-color:#0d4a46;transform:scale(1.02)}
+.slide.on .bgimg{animation:kb 9s ease-out forwards}@keyframes kb{to{transform:scale(1.12)}}
+.slide .shade{position:absolute;inset:0;background:linear-gradient(100deg,#072c2af0 0%,#072c2acc 42%,#072c2a33 100%)}
+.slide .in{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:center;padding:40px 56px;max-width:760px}
+.slide .chip{align-self:flex-start;display:inline-flex;gap:7px;align-items:center;background:#ffffff26;border:1px solid #fff4;backdrop-filter:blur(6px);padding:6px 14px;border-radius:99px;font:600 13px Outfit,sans-serif;margin-bottom:14px}
+.slide h1{font-size:clamp(30px,4.2vw,52px)}.slide .facts{display:flex;gap:18px;margin-top:20px;flex-wrap:wrap;font:600 14px Outfit,sans-serif;opacity:.95}.facts span{display:flex;gap:7px;align-items:center}
+.slide .btn.ghost{background:#ffffff26;color:#fff;border:1px solid #fff5}
+@media(max-width:640px){.hero{height:480px}.slide .in{padding:26px}}
+.svc{transition:transform .25s,box-shadow .25s}
+.svc .ic{width:66px;height:66px;border-radius:20px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--pri2),var(--pri));color:#fff;box-shadow:0 10px 22px #0f5c5740;transition:transform .3s}
+.svc .ic svg{width:30px;height:30px}.svc:hover .ic{transform:rotate(-8deg) scale(1.1);background:linear-gradient(135deg,var(--acc),var(--acc2));color:#2a1a00}
+.photo{height:160px;border-radius:14px;background-size:cover;background-position:center;background-color:#cfe6e2;margin-bottom:12px;position:relative;overflow:hidden;transition:transform .4s}
+.room:hover .photo{transform:scale(1.03)}.room .price-tag{position:absolute;right:10px;bottom:10px;background:#fff;color:var(--pri);font:800 14px Outfit;padding:5px 12px;border-radius:99px;box-shadow:0 4px 12px #0003}
+.prod .pic{transition:transform .3s}.prod:hover .pic{transform:scale(1.06)}.prod .pic svg{width:46px;height:46px;color:var(--pri)}
+.stars{display:flex;gap:2px;color:var(--acc)}.stars svg{fill:var(--acc)}
+.foot{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:13px}.foot a{color:var(--pri);font-weight:600;text-decoration:none;cursor:pointer}.foot a:hover{text-decoration:underline}
+.legal p{font-size:14px;line-height:1.6}
+
+.note,.note-h{font:500 12px Inter,sans-serif;color:var(--mut);margin:0 0 10px}
+.note-h{position:absolute;right:16px;bottom:12px;z-index:3;color:#fff;opacity:.75;font-size:11px}
+.two-c{display:grid;grid-template-columns:1fr 1.2fr;gap:22px;align-items:center}@media(max-width:760px){.two-c{grid-template-columns:1fr}}
+.photo.tall{height:320px;margin:0;border-radius:18px;box-shadow:0 14px 34px #0f5c5733}
+.stat{background:#0f5c570d;border-radius:14px;padding:14px;text-align:center;transition:transform .25s,background .25s}.stat:hover{transform:translateY(-4px);background:#f59e0b22}
+.stat b{display:block;font:800 26px Outfit;color:var(--pri)}.stat span{font-size:12px;color:var(--mut)}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}@media(max-width:700px){.gal{grid-template-columns:repeat(2,1fr)}}
+.gi{height:190px;border-radius:16px;background-size:cover;background-position:center;background-color:#cfe6e2;position:relative;overflow:hidden;transition:transform .35s,box-shadow .35s;cursor:pointer}
+.gi:hover{transform:scale(1.03);box-shadow:0 16px 34px #0004}.gi span{position:absolute;left:0;right:0;bottom:0;padding:26px 12px 10px;background:linear-gradient(transparent,#072c2acc);color:#fff;font:600 13px Outfit;opacity:0;transition:opacity .3s}.gi:hover span{opacity:1}
+.tcard{border:1px solid var(--line);border-radius:16px;padding:16px;transition:transform .25s,box-shadow .25s}.tcard:hover{transform:translateY(-4px);box-shadow:0 12px 28px #0f5c5722}
+.who{display:flex;gap:12px;align-items:center;margin-top:10px}.av{width:50px;height:50px;border-radius:50%;background:#cfe6e2 center/cover;border:3px solid #fff;box-shadow:0 2px 8px #0003;flex:none}
+.svph{height:130px;margin:-18px -18px 0;border-radius:16px 16px 0 0;background:#cfe6e2 center/cover;transition:transform .4s}.svc{overflow:hidden}.svc:hover .svph{transform:scale(1.05)}.svc .ic{margin-top:-33px;position:relative;border:4px solid #fff}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="logo"><span class="logo-mark">🐾</span> <span id="brand"></span> <span class="demo-tag">DEMO</span></div>
+  <div class="modes" id="modes">
+    <button data-m="site" class="on">🌐 Web Sitesi</button>
+    <button data-m="cust">🐶 Müşteri Paneli</button>
+    <button data-m="biz">📊 İşletme Paneli</button>
+  </div>
+</div>
+<main id="app"></main>
+
+<div class="fab">
+  <button style="background:#25d366" title="WhatsApp Destek" onclick="waClick()">💬</button>
+  <button style="background:#6366f1" title="AI Asistan" onclick="document.getElementById('chat').classList.toggle('on')">🤖</button>
+</div>
+<div class="chat" id="chat">
+  <header>🤖 Pati Asistan <span style="font-weight:400;font-size:12px">• 7/24 çevrimiçi</span></header>
+  <div class="msgs" id="msgs"><div class="m b">Merhaba! 🐾 Fiyatlar, doluluk, aşı şartları ve rezervasyon hakkında sorabilirsiniz.</div></div>
+  <div class="row" style="padding:8px"><input id="cin" placeholder="Mesajınızı yazın…" onkeydown="if(event.key==='Enter')ask()"><button class="btn sm" onclick="ask()">Gönder</button></div>
+</div>
+
+<script src="config.js"></script>
+<script src="emo.js"></script>
+<script src="protect.js"></script>
+<script>
+/* ================= VERİ ================= */
+const TL=n=>new Intl.NumberFormat('tr-TR').format(Math.round(n))+' ₺';
+const iso=d=>d.toISOString().slice(0,10);
+const addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const today=new Date(new Date().toDateString()+' 12:00');
+const fmtD=s=>new Date(s+'T12:00').toLocaleDateString('tr-TR',{day:'2-digit',month:'short'});
+const ROOMS=[
+ {id:'H1',name:'Standart Oda 1',type:'hotel',price:650},{id:'H2',name:'Standart Oda 2',type:'hotel',price:650},
+ {id:'H3',name:'Standart Oda 3',type:'hotel',price:650},{id:'H4',name:'Standart Oda 4',type:'hotel',price:650},
+ {id:'V1',name:'VIP Süit 1',type:'hotel',price:1100},{id:'V2',name:'VIP Süit 2',type:'hotel',price:1100},
+ {id:'B1',name:'Oyun Alanı A',type:'care',price:150},{id:'B2',name:'Oyun Alanı B',type:'care',price:150},{id:'B3',name:'Tımar & Bakım Odası',type:'care',price:300}
+];
+const HOURS=[8,9,10,11,12,13,14,15,16,17,18,19];
+let CUST=[
+ {id:1,name:'Ayşe Yılmaz',phone:'0532 111 22 33',email:'ayse@mail.com',dogs:[
+   {name:'Pamuk',breed:'Golden Retriever',age:3,kg:29,sex:'Dişi',notes:'Çok sosyal, tavuğa alerjisi var. Gece ışık ister.',vac:'Karma+Kuduz: 03/2026',allergy:'Tavuk',color:'#f5c26b'},
+   {name:'Max',breed:'Fransız Bulldog',age:5,kg:12,sex:'Erkek',notes:'Sıcakta çabuk yorulur. Yürüyüş kısa tutulsun.',vac:'Karma+Kuduz: 01/2026',allergy:'-',color:'#c9b8a6'}],hist:[['2026-08-10','Pansiyon 5 gece','3.250 ₺'],['2026-09-02','Temel itaat eğitimi','2.400 ₺']]},
+ {id:2,name:'Mehmet Kaya',phone:'0505 444 55 66',email:'mehmet@mail.com',dogs:[{name:'Zeytin',breed:'Border Collie',age:2,kg:18,sex:'Dişi',notes:'Yüksek enerji, günde 2 saat oyun şart.',vac:'Karma+Kuduz: 05/2026',allergy:'-',color:'#8a8a8a'}],hist:[['2026-09-18','Oyun alanı 4 saat','600 ₺']]},
+ {id:3,name:'Elif Demir',phone:'0544 777 88 99',email:'elif@mail.com',dogs:[{name:'Karamel',breed:'Cavalier King Charles',age:4,kg:8,sex:'Dişi',notes:'Kalp üfürümü takipte; ilaç saati 20:00.',vac:'Karma+Kuduz: 04/2026',allergy:'Buğday',color:'#d9a066'}],hist:[['2026-07-21','Pansiyon 3 gece VIP','3.300 ₺']]},
+ {id:4,name:'Can Aydın',phone:'0530 222 33 44',email:'can@mail.com',dogs:[{name:'Rocky',breed:'Alman Çoban Köpeği',age:6,kg:38,sex:'Erkek',notes:'Diğer erkek köpeklere karşı temkinli; ayrı oyun.',vac:'Karma+Kuduz: 02/2026',allergy:'-',color:'#a0703a'}],hist:[['2026-10-02','Davranış eğitimi paketi (8 ders)','9.600 ₺']]},
+ {id:5,name:'Selin Çelik',phone:'0551 666 77 88',email:'selin@mail.com',dogs:[{name:'Mia',breed:'Pomeranian',age:1,kg:3,sex:'Dişi',notes:'Küçük, soğuktan korunmalı.',vac:'Karma: 06/2026',allergy:'-',color:'#ffb86b'}],hist:[['2026-10-12','Tımar & Bakım','300 ₺']]}
+];
+let RES=[
+ {id:101,cust:2,dog:'Zeytin',room:'H1',start:iso(addD(today,0)),end:iso(addD(today,3)),status:'confirmed',total:1950,paid:585},
+ {id:102,cust:3,dog:'Karamel',room:'V1',start:iso(addD(today,1)),end:iso(addD(today,5)),status:'confirmed',total:4400,paid:4400},
+ {id:103,cust:4,dog:'Rocky',room:'H3',start:iso(addD(today,2)),end:iso(addD(today,4)),status:'pending',total:1300,paid:390},
+ {id:104,cust:5,dog:'Mia',room:'H2',start:iso(addD(today,-1)),end:iso(addD(today,2)),status:'confirmed',total:1950,paid:1950},
+ {id:105,cust:1,dog:'Max',room:'H4',start:iso(addD(today,6)),end:iso(addD(today,9)),status:'confirmed',total:1950,paid:585},
+ {id:106,cust:2,dog:'Zeytin',room:'B1',start:iso(today),end:iso(today),hours:[10,11,12],status:'confirmed',total:450,paid:450},
+ {id:107,cust:4,dog:'Rocky',room:'B2',start:iso(today),end:iso(today),hours:[14,15],status:'pending',total:300,paid:90},
+ {id:108,cust:5,dog:'Mia',room:'B3',start:iso(today),end:iso(today),hours:[9],status:'confirmed',total:300,paid:300}
+];
+let nextId=200;
+const PRODUCTS=[
+ {n:'Premium Kuru Mama 12kg',p:1450,e:'🥣',c:'#fde7c2'},{n:'Diş Temizleme Kemiği',p:95,e:'🦴',c:'#e7f5ee'},
+ {n:'Tasma & Gezdirme Seti',p:520,e:'🦮',c:'#e0e7ff'},{n:'Tırtıklı Oyuncak Top',p:120,e:'🎾',c:'#fef3c7'},
+ {n:'Ortopedik Yatak (L)',p:1890,e:'🛏️',c:'#fce7f3'},{n:'Şampuan & Bakım Seti',p:340,e:'🧴',c:'#dbeafe'},
+ {n:'Ödül Maması (Tavuksuz)',p:210,e:'🍖',c:'#ffe4e6'},{n:'Seyahat Taşıma Çantası',p:980,e:'🎒',c:'#e5e7eb'}
+];
+let CART={};
+const FIN={months:['May','Haz','Tem','Ağu','Eyl','Eki'],gelir:[118,142,176,191,158,172],gider:[74,81,92,98,88,94]}; // bin ₺
+const GIDER=[['Personel maaşları','54.000 ₺'],['Mama & malzeme','18.400 ₺'],['Elektrik / su / doğalgaz','9.600 ₺'],['Veteriner & sağlık','6.200 ₺'],['Kira','32.000 ₺']];
+const DOGSVG=(c)=>`<svg viewBox="0 0 100 100" width="84" height="84"><ellipse cx="22" cy="40" rx="14" ry="24" fill="${c}" opacity=".85" transform="rotate(18 22 40)"/><ellipse cx="78" cy="40" rx="14" ry="24" fill="${c}" opacity=".85" transform="rotate(-18 78 40)"/><circle cx="50" cy="55" r="32" fill="${c}"/><ellipse cx="50" cy="68" rx="16" ry="12" fill="#fff6"/><circle cx="38" cy="50" r="4.5" fill="#222"/><circle cx="62" cy="50" r="4.5" fill="#222"/><ellipse cx="50" cy="62" rx="6" ry="4.5" fill="#222"/><path d="M50 66v5m-7 1q7 6 14 0" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
+
+/* ================= DURUM ================= */
+let mode='site',sub={cust:'book',biz:'ozet'},ME=1;
+let draft={type:'hotel',room:null,start:null,end:null,date:iso(today),hours:[],dog:null};
+
+/* ================= YARDIMCI ================= */
+const $=s=>document.querySelector(s);
+function toast(t){const e=document.createElement('div');e.className='toast';e.innerHTML=emo(t.replace(/</g,'&lt;'));icons();document.body.appendChild(e);setTimeout(()=>e.remove(),3200)}
+function modal(html,raw){html=raw?html:emo(html);closeModal();const m=document.createElement('div');m.className='modal-bg';m.id='mdl';m.innerHTML=`<div class="modal"><button class="x" onclick="closeModal()">×</button>${html}</div>`;m.addEventListener('click',e=>{if(e.target===m)closeModal()});document.body.appendChild(m);icons()}
+function closeModal(){const m=$('#mdl');if(m)m.remove()}
+const room=id=>ROOMS.find(r=>r.id===id);
+const custOf=id=>CUST.find(c=>c.id===id);
+function waClick(){toast('💬 Demo: Canlıda bu buton işletmenin WhatsApp hattını açar.')}
+function nights(a,b){return Math.round((new Date(b+'T12:00')-new Date(a+'T12:00'))/864e5)}
+function hotelState(rid,d){ // d iso
+  for(const r of RES){if(r.room!==rid||r.status==='cancelled'||r.hours)continue;if(r.start<=d&&d<r.end)return r.status==='pending'?'wait':'busy'}
+  return 'free';
+}
+function careState(rid,date,h){
+  for(const r of RES){if(r.room!==rid||r.status==='cancelled'||!r.hours||r.start!==date)continue;if(r.hours.includes(h))return r.status==='pending'?'wait':'busy'}
+  return 'free';
+}
+const stPill=s=>({confirmed:'<span class="pill p-ok">Onaylandı</span>',pending:'<span class="pill p-wait">Onay Bekliyor</span>',cancelled:'<span class="pill p-bad">İptal</span>'})[s];
+
+/* ================= MESAJ ŞABLONLARI ================= */
+function tpl(kind,r){
+  const c=custOf(r.cust),rm=room(r.room),when=r.hours?`${fmtD(r.start)} ${r.hours[0]}:00–${r.hours[r.hours.length-1]+1}:00`:`${fmtD(r.start)} → ${fmtD(r.end)}`;
+  const T={
+   onay:{ch:'WhatsApp + E-posta',t:'Rezervasyon Onayı',wa:`Merhaba ${c.name} 🐾\n${r.dog} için rezervasyonunuz ONAYLANDI ✅\n\n📍 ${rm.name}\n🗓 ${when}\n💳 Ödenen: ${TL(r.paid)} • Kalan: ${TL(r.total-r.paid)}\n\nGiriş için güncel aşı kartını getirmeyi unutmayın. Görüşmek üzere! — ${DEMO.name}`,sub:`Rezervasyonunuz onaylandı – ${r.dog}`},
+   hatirla:{ch:'WhatsApp + SMS',t:'Hatırlatma (24 saat önce)',wa:`Merhaba ${c.name} 👋\nYarın ${r.dog} için ${rm.name} rezervasyonunuz var (${when}).\nBir değişiklik gerekirse panelden veya bu mesaja yanıt vererek bildirebilirsiniz. 🐶`,sub:'Yarınki rezervasyonunuzu hatırlatırız'},
+   iptal:{ch:'WhatsApp + E-posta',t:'İptal Bilgilendirmesi',wa:`Merhaba ${c.name},\n${r.dog} için ${when} tarihli rezervasyonunuz iptal edilmiştir.\nÖdemeniz varsa iade süreci 3–5 iş günü içinde başlatılır. Yeniden planlamak için bize yazabilirsiniz. 🐾`,sub:'Rezervasyon iptal bilgilendirmesi'},
+   odeme:{ch:'E-posta',t:'Ödeme Alındı / Makbuz',wa:`Ödemeniz alındı ✅\nTutar: ${TL(r.paid)}\nYöntem: Kredi Kartı (PayTR/iyzico)\nRezervasyon no: #${r.id}`,sub:`Ödeme makbuzunuz – #${r.id}`},
+   kampanya:{ch:'E-posta',t:'Satış / Kampanya Maili',wa:`Merhaba ${c.name} 🎁\n${r.dog} için sonbahar fırsatı: 3 gece pansiyona %15 indirim + 1 ücretsiz tımar!\nKod: SONBAHAR15 • 30 Kasım'a kadar geçerli.\n\nMağazada seçili mamalarda ek %10 💛`,sub:'🍂 Sonbahar kampanyası – 3 geceye %15 indirim'}
+  };
+  return T[kind];
+}
+function showTpl(kind,rid){
+  const r=RES.find(x=>x.id===rid)||RES[0],t=tpl(kind,r),c=custOf(r.cust);
+  modal(`<h3>${t.t}</h3><p style="color:var(--mut);margin-top:0">Kanal: <b>${t.ch}</b> • Alıcı: ${c.name} (${c.phone})</p>
+  <label>WhatsApp / SMS önizleme</label><div class="wa">${t.wa}</div>
+  <label style="margin-top:14px">E-posta konusu</label><div class="mail"><b>${t.sub}</b>\n\n${t.wa}\n\n— ${DEMO.name}</div>
+  <p style="font-size:12px;color:var(--mut)">Bu mesaj otomatik gönderilir; metni işletme sahibi panelden düzenleyebilir.</p>`,true);
+}
+
+/* ================= WEB SİTESİ ================= */
+
+const LEGAL={
+ kvkk:['KVKK Aydınlatma Metni','Kişisel verileriniz (ad, telefon, e-posta, köpeğinizin sağlık ve davranış bilgileri) rezervasyon ve hizmet süreçlerini yürütmek amacıyla 6698 sayılı KVKK kapsamında işlenir. Verileriniz yasal yükümlülükler dışında üçüncü kişilerle paylaşılmaz. Başvuru, silme ve düzeltme haklarınızı işletmeye iletebilirsiniz.'],
+ gizlilik:['Gizlilik Politikası','Sitemizde toplanan bilgiler yalnızca hizmet sunumu, ödeme doğrulama ve iletişim amacıyla kullanılır. Kart bilgileri işletmede saklanmaz; ödeme altyapısı sağlayıcısı (PayTR / iyzico) tarafından işlenir.'],
+ cerez:['Çerez Politikası','Sitemiz oturum yönetimi, tercihlerinizin hatırlanması ve anonim istatistik için çerez kullanır. Zorunlu olmayan çerezler için onayınız istenir; tarayıcınızdan dilediğiniz zaman kapatabilirsiniz.'],
+ mesafeli:['Mesafeli Satış Sözleşmesi','Mağaza ürünleri ve online satılan hizmetler için 6502 sayılı Kanun ve Mesafeli Sözleşmeler Yönetmeliği uyarınca ön bilgilendirme formu ve sözleşme, ödeme öncesinde alıcıya sunulur ve onayı alınır.'],
+ iade:['İptal, İade ve Kapora Koşulları','Girişten 48 saat öncesine kadar yapılan iptallerde kapora iade edilir. Daha geç iptallerde kapora iade edilmez. İade, ödemenin yapıldığı kanala 3–5 iş günü içinde yapılır.'],
+ kullanim:['Kullanım Şartları','Sitenin ve rezervasyon panelinin kullanımı bu şartlara tabidir. Köpeğin güncel aşı kartı ve doğru sağlık beyanı müşterinin sorumluluğundadır.']
+};
+function showLegal(k){const l=LEGAL[k];modal('<div class="legal"><h3>'+l[0]+'</h3><p>'+l[1]+'</p><p style="font-size:12px;color:var(--mut)">Demo metindir. Canlıya alırken işletmenin bilgileriyle hazırlanır; nihai hukuki onay işletmenin hukuk danışmanındadır.</p></div>')}
+const SLIDES=[
+ {img:'hero-golden',chip:['hotel','Pansiyon & Bakım'],h:'Sevimli dostunuz güvenli ellerde',p:'Profesyonel eğitmenler eşliğinde konforlu pansiyon, oyun alanı ve günlük bakım.',facts:[['video','7/24 kamera'],['shield-check','Veteriner onaylı'],['star','4.9 müşteri puanı']]},
+ {img:'family-2',chip:['heart','Mutlu Aileler'],h:'Ailenizin bir üyesi bizim de misafirimiz',p:'Tatilde, iş gezisinde, ameliyat sonrası bakımda: dostunuz sevgiyle ve güvenle ağırlanır.',facts:[['camera','Günlük foto rapor'],['stethoscope','Veteriner desteği'],['heart-handshake','Sevgi dolu bakım']]},
+ {img:'hero-kangal',chip:['graduation-cap','Eğitim'],h:'Güçlü, dengeli, itaatkâr',p:'Büyük ırklara özel davranış ve itaat eğitimi; bireysel ve grup dersleri.',facts:[['target','Bireysel program'],['users','Grup dersleri'],['award','Sertifikalı eğitmen']]},
+ {img:'hero-trainer',chip:['calendar-check','Online Rezervasyon'],h:'Boş odayı görün, anında ayırtın',p:'Gün ve saat bazlı canlı doluluk, kapora ile güvenli ödeme, otomatik onay mesajı.',facts:[['calendar-days','Canlı takvim'],['credit-card','PayTR / iyzico'],['message-circle','WhatsApp onay']]},
+ {img:'family-1',chip:['smile','Mutlu Patiler'],h:'Eve döndüğünde kuyruk sallayan bir dost',p:'Her konaklama sonrası mutlu, yorgun ve bakımlı bir köpek teslim ederiz.',facts:[['smile','%98 memnuniyet (örnek)'],['sparkles','Bakım & tımar dahil'],['phone','Anlık bilgilendirme']]},
+ {img:'hero-play',chip:['trees','Oyun Alanı'],h:'Sosyalleşme ve enerji atma alanı',p:'Güvenli, çitli ve gözetimli oyun alanları; saatlik rezervasyon.',facts:[['clock','Saatlik kiralama'],['paw-print','Irka göre gruplama'],['heart','Mutlu patiler']]}
+];
+const PRODUCTS_IC=['package','bone','dog','trophy','bed-double','spray-can','drumstick','backpack'];
+function viewSite(){
+  const cartN=Object.values(CART).reduce((a,b)=>a+b,0);
+  return `<div class="hero" id="hero">${SLIDES.map((s,i)=>`<div class="slide ${i?'':'on'}"><div class="bgimg" style="background-image:url(img/${s.img}.jpg)"></div><div class="shade"></div><div class="in"><span class="chip"><i data-lucide="${s.chip[0]}"></i>${s.chip[1]}</span><h1>${s.h}</h1><p style="max-width:520px;font-size:17px;margin:0">${s.p}</p><div class="row" style="margin-top:20px"><button class="btn acc" onclick="go('cust')"><i data-lucide="calendar-check"></i> Rezervasyon Yap</button><button class="btn ghost" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})"><i data-lucide="shopping-bag"></i> Mağazaya Git</button></div><div class="facts">${s.facts.map(f=>`<span><i data-lucide="${f[0]}"></i>${f[1]}</span>`).join('')}</div></div></div>`).join('')}
+   <div class="note-h">Görseller temsilidir</div><div class="dots">${SLIDES.map((_,i)=>`<i class="${i?'':'on'}" onclick="slideTo(${i})"></i>`).join('')}</div></div>
+  <div class="grid g4" style="margin-bottom:16px">${[['hotel','Köpek Oteli','Standart & VIP odalar, 7/24 kamera ve bakım.','svc-hotel'],['trees','Oyun Alanı','Saatlik, güvenli ve sosyalleşme odaklı alanlar.','svc-play'],['graduation-cap','Köpek Eğitimi','İtaat, davranış ve yavru eğitimi programları.','svc-train'],['bath','Tımar & Bakım','Banyo, tarama, tırnak ve kulak bakımı.','svc-groom']].map(x=>`<div class="card svc"><div class="svph" style="background-image:url(img/${x[3]}.jpg)"></div><div class="ic"><i data-lucide="${x[0]}"></i></div><h3>${x[1]}</h3><p style="color:var(--mut);margin:0">${x[2]}</p></div>`).join('')}</div>
+  <div class="card"><h2>Odalarımız ve Fiyatlar</h2><div class="grid g3">
+   ${[['room-std','Standart Oda','Isıtmalı zemin, günlük 3 yürüyüş, kamera.','650 ₺ / gece'],['room-vip','VIP Süit','Geniş süit, özel bahçe erişimi, canlı yayın.','1.100 ₺ / gece'],['hero-play','Oyun Alanı / Bakım','Saat bazlı rezervasyon, gözetimli oyun.','150 – 300 ₺ / saat']].map(r=>`<div class="room"><div class="photo" style="background-image:url(img/${r[0]}.jpg)"><span class="price-tag">${r[3]}</span></div><h3>${r[1]}</h3><p style="margin:0;color:var(--mut)">${r[2]}</p></div>`).join('')}</div>
+   <div style="margin-top:14px"><button class="btn" onclick="go('cust')"><i data-lucide="calendar-days"></i> Boş yerleri gör ve talep gönder</button></div></div>
+  <div class="card"><div class="two-c"><div class="photo tall" style="background-image:url(img/trainer.jpg)"></div><div><h2>Eğitmenimizle tanışın</h2><p style="color:var(--mut)">Sertifikalı eğitmenimiz her köpeğin karakterine göre program hazırlar: pozitif pekiştirme, sosyalleşme ve günlük aktivite. Pansiyondaki her misafir için gün sonunda fotoğraflı rapor gönderilir.</p><div class="grid g3">${[['1.200+','Misafir köpek'],['8 yıl','Deneyim'],['%98','Memnuniyet']].map(x=>`<div class="stat"><b>${x[0]}</b><span>${x[1]} (örnek)</span></div>`).join('')}</div></div></div></div><div class="card"><h2>Mutlu patiler, mutlu insanlar</h2><div class="gal">${[['people-1','Pamuk ve sahibi'],['hero-golden','Bahçede oyun'],['people-2','Kangal ile yürüyüş'],['hero-play','Oyun alanı'],['people-3','Aile ziyareti'],['hero-trainer','Eğitim seansı'],['family-1','Evde mutlu aile'],['family-2','Çayırda yürüyüş'],['happy-dog','Gülümseyen dost']].map(g=>`<div class="gi" style="background-image:url(img/${g[0]}.jpg)"><span>${g[1]}</span></div>`).join('')}</div><p class="note" style="margin:10px 0 0">Görseller temsilidir.</p></div><div class="card" id="shop"><div class="photo" style="height:130px;background-image:url(img/shop-banner.jpg)"></div><div class="row" style="justify-content:space-between"><h2>Pati Mağaza</h2><button class="btn acc" onclick="openCart()"><i data-lucide="shopping-cart"></i> Sepet (${cartN})</button></div>
+   <div class="grid g4">${PRODUCTS.map((p,i)=>`<div class="prod card" style="margin:0;box-shadow:none;border:1px solid var(--line)"><div class="pic" style="background:${p.c}"><i data-lucide="${PRODUCTS_IC[i]}"></i></div><b style="font-size:14px">${p.n}</b><div style="margin:6px 0;font:800 17px Outfit">${TL(p.p)}</div><button class="btn sm" onclick="addCart(${i})"><i data-lucide="plus"></i> Sepete Ekle</button></div>`).join('')}</div></div>
+  <div class="card"><h2>Müşterilerimiz ne diyor?</h2><div class="grid g3">${[['Ayşe Y.','“Pamuk için her gün fotoğraf geldi, içim rahat etti.”'],['Mehmet K.','“Panelden saat saat boş yer görmek harika.”'],['Elif D.','“Karamel’in ilaç saatine dikkat ettiler, teşekkürler.”']].map((t,i)=>`<div class="tcard"><div class="stars">${'<i data-lucide="star"></i>'.repeat(5)}</div><p>${t[1]}</p><div class="who"><span class="av" style="background-image:url(img/people-${i+1}.jpg)"></span><b>${t[0]}</b></div></div>`).join('')}</div></div>
+  <div class="card legal"><p class="note">Görseller temsilidir.</p><div class="foot"><b>${DEMO.name}</b>${Object.keys(LEGAL).map(k=>`<a onclick="showLegal('${k}')">${LEGAL[k][0]}</a>`).join('')}</div></div>`;
+}
+let sl=0,slT;
+function slideTo(i){sl=i;document.querySelectorAll('#hero .slide').forEach((s,k)=>s.classList.toggle('on',k===i));document.querySelectorAll('#hero .dots i').forEach((s,k)=>s.classList.toggle('on',k===i))}
+function startSlider(){clearInterval(slT);slT=setInterval(()=>{if(mode==='site')slideTo((sl+1)%SLIDES.length)},4500)}
+function addCart(i){CART[i]=(CART[i]||0)+1;toast('🛒 '+PRODUCTS[i].n+' sepete eklendi');render()}
+function openCart(){
+  const items=Object.entries(CART),tot=items.reduce((a,[i,q])=>a+PRODUCTS[i].p*q,0);
+  modal(`<h3>🛒 Sepetiniz</h3>${items.length?`<table>${items.map(([i,q])=>`<tr><td>${PRODUCTS[i].e} ${PRODUCTS[i].n}</td><td>x${q}</td><td>${TL(PRODUCTS[i].p*q)}</td></tr>`).join('')}</table><h3 style="margin-top:12px">Toplam: ${TL(tot)}</h3><button class="btn acc" onclick="pay(${tot},'Mağaza siparişi',()=>{CART={};render();toast('Sipariş alındı, onay e-postası gönderildi')})">Ödemeye Geç</button>`:'<p>Sepetiniz boş.</p>'}`);
+}
+
+/* ================= ÖDEME ================= */
+function pay(total,label,done,allowDeposit){
+  window._payDone=done;
+  modal(`<h3>💳 Güvenli Ödeme</h3><p style="margin-top:0;color:var(--mut)">${label}</p>
+  ${allowDeposit?`<label>Ödeme şekli</label><select id="pmode" onchange="payAmt(${total})"><option value="30">Kapora (%30)</option><option value="100">Tamamını öde</option></select>`:`<input type="hidden" id="pmode" value="100">`}
+  <h2 id="pamt" style="margin:10px 0">${TL(allowDeposit?total*.3:total)}</h2>
+  <label>Ödeme altyapısı</label><div class="row"><label style="font-size:14px;color:var(--ink)"><input type="radio" name="gw" checked style="width:auto"> PayTR</label><label style="font-size:14px;color:var(--ink)"><input type="radio" name="gw" style="width:auto"> iyzico</label><label style="font-size:14px;color:var(--ink)"><input type="radio" name="gw" style="width:auto"> Havale/EFT</label></div>
+  <label>Kart üzerindeki isim</label><input value="AYŞE YILMAZ"><div class="grid g2"><div><label>Kart no</label><input value="4242 4242 4242 4242"></div><div><label>SKT / CVV</label><input value="12/29  •  123"></div></div>
+  <label style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--ink);font-weight:500"><input type="checkbox" id="ctr" style="width:auto;margin-top:2px" checked> Mesafeli Satış Sözleşmesi, İptal/İade Koşulları ve KVKK Aydınlatma Metni'ni okudum, kabul ediyorum.</label>
+  <p style="font-size:12px;color:var(--mut)">🔒 Demo: gerçek kart bilgisi girilmez, ödeme yapılmaz. Canlıda 3D Secure ile PayTR / iyzico sayfasına yönlenir.</p>
+  <button class="btn acc" style="width:100%" onclick="payGo(${total})">Ödemeyi Tamamla</button>`);
+}
+function payAmt(t){const v=+$('#pmode').value;$('#pamt').textContent=TL(t*v/100)}
+function payGo(t){if(!$('#ctr').checked){toast('Devam etmek için sözleşmeyi onaylayın');return}const v=+$('#pmode').value;const amt=t*v/100;$('.modal').innerHTML='<div style="text-align:center;padding:40px"><div style="font-size:50px">⏳</div><b>Ödeme doğrulanıyor…</b></div>';
+  setTimeout(()=>{closeModal();window._payDone&&window._payDone(amt);},1300)}
+
+/* ================= MÜŞTERİ PANELİ ================= */
+function viewCust(){
+  const tabs=[['book','📅 Rezervasyon Yap'],['mine','🧾 Rezervasyonlarım'],['dogs','🐶 Köpeklerim']];
+  return `<div class="layout"><div class="side"><div style="padding:8px 14px;color:var(--mut);font-size:13px">Merhaba, <b>${custOf(ME).name}</b></div>${tabs.map(t=>`<button class="${sub.cust===t[0]?'on':''}" onclick="sub.cust='${t[0]}';render()">${t[1]}</button>`).join('')}</div><div>${({book:custBook,mine:custMine,dogs:custDogs})[sub.cust]()}</div></div>`;
+}
+function custBook(){
+  const me=custOf(ME);if(!draft.dog)draft.dog=me.dogs[0].name;
+  const days=[...Array(14)].map((_,i)=>addD(today,i));
+  const rms=ROOMS.filter(r=>r.type===draft.type);
+  let cal='';
+  if(draft.type==='hotel'){
+    cal=`<div class="cal"><table><tr><th></th>${days.map(d=>`<th>${d.toLocaleDateString('tr-TR',{weekday:'short'})}<br>${d.getDate()}</th>`).join('')}</tr>
+    ${rms.map(r=>`<tr><td class="rn">${r.name}<br><small style="color:var(--mut)">${TL(r.price)}/gece</small></td>${days.map(d=>{const s=iso(d),st=hotelState(r.id,s),sel=draft.room===r.id&&draft.start&&s>=draft.start&&s<=(draft.end||draft.start);
+      return `<td><div class="cell ${sel?'c-sel':'c-'+st}" ${st==='free'?`onclick="pickDay('${r.id}','${s}')"`:''}>${sel?'✓':st==='free'?'':st==='busy'?'Dolu':'Bek.'}</div></td>`}).join('')}</tr>`).join('')}</table></div>
+    <p style="font-size:13px;color:var(--mut)">Önce giriş gününe, sonra çıkış gününe tıklayın (aynı oda).</p>`;
+  }else{
+    cal=`<div class="row" style="margin-bottom:8px"><label style="margin:0">Gün:</label><select style="width:auto" onchange="draft.date=this.value;draft.hours=[];draft.room=null;render()">${days.slice(0,7).map(d=>`<option value="${iso(d)}" ${iso(d)===draft.date?'selected':''}>${d.toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long'})}</option>`).join('')}</select></div>
+    <div class="cal"><table><tr><th></th>${HOURS.map(h=>`<th>${h}:00</th>`).join('')}</tr>
+    ${rms.map(r=>`<tr><td class="rn">${r.name}<br><small style="color:var(--mut)">${TL(r.price)}/saat</small></td>${HOURS.map(h=>{const st=careState(r.id,draft.date,h),sel=draft.room===r.id&&draft.hours.includes(h);
+      return `<td><div class="cell ${sel?'c-sel':'c-'+st}" ${st==='free'?`onclick="pickHour('${r.id}',${h})"`:''}>${sel?'✓':st==='free'?'':st==='busy'?'Dolu':'Bek.'}</div></td>`}).join('')}</tr>`).join('')}</table></div>`;
+  }
+  const r=draft.room&&room(draft.room);let total=0,desc='';
+  if(r&&draft.type==='hotel'&&draft.start){const n=Math.max(1,nights(draft.start,draft.end||draft.start)+(draft.end?0:1));total=n*r.price;desc=`${r.name} • ${fmtD(draft.start)}${draft.end?' → '+fmtD(iso(addD(new Date(draft.end+'T12:00'),1))):''} • ${n} gece`}
+  if(r&&draft.type==='care'&&draft.hours.length){total=draft.hours.length*r.price;desc=`${r.name} • ${fmtD(draft.date)} • ${draft.hours.length} saat`}
+  return `<div class="card"><h2>Rezervasyon Talebi Oluştur</h2>
+   <div class="row" style="margin-bottom:12px">
+    <button class="btn ${draft.type==='hotel'?'':'ghost'}" onclick="draft.type='hotel';draft.room=null;draft.start=draft.end=null;render()">🏨 Otel Odası (gün bazlı)</button>
+    <button class="btn ${draft.type==='care'?'':'ghost'}" onclick="draft.type='care';draft.room=null;draft.hours=[];render()">🎾 Oyun / Bakım Odası (saat bazlı)</button>
+    <div style="margin-left:auto;min-width:200px"><label style="margin:0">Köpeğim</label><select onchange="draft.dog=this.value">${me.dogs.map(d=>`<option ${d.name===draft.dog?'selected':''}>${d.name}</option>`).join('')}</select></div></div>
+   <div class="legend"><span><i style="background:#dcfce7"></i>Boş</span><span><i style="background:#fde68a"></i>Onay bekliyor</span><span><i style="background:#fecaca"></i>Dolu</span><span><i style="background:var(--pri)"></i>Seçiminiz</span></div><div style="margin-top:10px">${cal}</div></div>
+   <div class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:space-between"><div><b>${desc||'Henüz seçim yapılmadı'}</b><div style="color:var(--mut);font-size:13px">${total?'Toplam: <b style="color:var(--ink);font-size:18px">'+TL(total)+'</b> — kapora (%30): '+TL(total*.3):'Takvimden boş bir hücre seçin.'}</div></div>
+   <button class="btn acc" ${total?'':'disabled style="opacity:.5"'} onclick="submitRes(${total})">Talep Gönder & Öde →</button></div>`;
+}
+function pickDay(rid,s){
+  if(draft.room!==rid||!draft.start||draft.end){draft.room=rid;draft.start=s;draft.end=null;render();return}
+  if(s<draft.start){draft.start=s;render();return}
+  for(let d=draft.start;d<=s;d=iso(addD(new Date(d+'T12:00'),1))){if(hotelState(rid,d)!=='free'){toast('⚠ Aralıkta dolu gün var');return}}
+  draft.end=s;render();
+}
+function pickHour(rid,h){
+  if(draft.room!==rid){draft.room=rid;draft.hours=[]}
+  draft.hours=draft.hours.includes(h)?draft.hours.filter(x=>x!==h):[...draft.hours,h].sort((a,b)=>a-b);
+  if(!draft.hours.length)draft.room=null;render();
+}
+function submitRes(total){
+  const rid=draft.room,isH=draft.type==='hotel',snap={...draft,hours:[...draft.hours]};
+  pay(total,'Rezervasyon: '+$('.card b').textContent,paid=>{
+    const r={id:nextId++,cust:ME,dog:snap.dog,room:rid,start:isH?snap.start:snap.date,end:isH?(iso(addD(new Date((snap.end||snap.start)+'T12:00'),1))):snap.date,status:'pending',total,paid};
+    if(!isH)r.hours=snap.hours;RES.push(r);draft={type:snap.type,room:null,start:null,end:null,date:snap.date,hours:[],dog:snap.dog};
+    sub.cust='mine';render();showTpl('odeme',r.id);toast('✅ Talebiniz alındı. İşletme onayı sonrası onay mesajı gelecek.');
+  },true);
+}
+function custMine(){
+  const mine=RES.filter(r=>r.cust===ME).sort((a,b)=>b.id-a.id);
+  return `<div class="card"><h2>Rezervasyonlarım</h2><table><tr><th>No</th><th>Köpek</th><th>Oda</th><th>Tarih</th><th>Tutar</th><th>Durum</th><th></th></tr>
+  ${mine.map(r=>`<tr><td>#${r.id}</td><td>${r.dog}</td><td>${room(r.room).name}</td><td>${r.hours?fmtD(r.start)+' '+r.hours[0]+':00–'+(r.hours.slice(-1)[0]+1)+':00':fmtD(r.start)+' → '+fmtD(r.end)}</td><td>${TL(r.total)}<br><small>Ödenen ${TL(r.paid)}</small></td><td>${stPill(r.status)}</td>
+  <td>${r.status!=='cancelled'?`<button class="btn sm bad" onclick="cancelRes(${r.id})">İptal</button>`:''}</td></tr>`).join('')||'<tr><td colspan=7>Kayıt yok</td></tr>'}</table></div>
+  <div class="card"><h3>📩 Size otomatik gönderilen mesajlar</h3><div class="row">${mine[0]?['onay','hatirla','iptal','odeme'].map(k=>`<button class="btn ghost sm" onclick="showTpl('${k}',${mine[0].id})">${tpl(k,mine[0]).t}</button>`).join(''):''}</div></div>`;
+}
+function cancelRes(id){const r=RES.find(x=>x.id===id);r.status='cancelled';render();showTpl('iptal',id)}
+function custDogs(){
+  return custOf(ME).dogs.map(d=>dogCard(d,true)).join('')+`<button class="btn ghost" onclick="toast('Demo: Yeni köpek ekleme formu burada açılır')">+ Yeni köpek ekle</button>`;
+}
+function dogCard(d,edit){
+  return `<div class="card dogcard"><div class="av">${DOGSVG(d.color)}</div><div style="flex:1"><h3>${d.name} <span class="tag">${d.breed}</span></h3>
+   <div><span class="tag">${d.sex}</span><span class="tag">${d.age} yaş</span><span class="tag">${d.kg} kg</span><span class="tag">💉 ${d.vac}</span>${d.allergy!=='-'?`<span class="tag red">⚠ Alerji: ${d.allergy}</span>`:''}</div>
+   <p style="margin:8px 0 0"><b>Özel notlar:</b> ${d.notes}</p>${edit?`<button class="btn sm ghost" style="margin-top:8px" onclick="toast('Demo: Düzenleme formu açılır')">Kartı düzenle</button>`:''}</div></div>`;
+}
+
+/* ================= İŞLETME PANELİ ================= */
+function viewBiz(){
+  const tabs=[['ozet','📊 Özet'],['rez','🧾 Rezervasyonlar'],['doluluk','🗓 Doluluk'],['musteri','👥 Müşteri Kartları'],['finans','💰 Gelir-Gider'],['magaza','🛍️ Mağaza'],['mesaj','✉ Otomatik Mesajlar']];
+  return `<div class="layout"><div class="side"><div style="padding:8px 14px;color:var(--mut);font-size:13px">Yönetici girişi</div>${tabs.map(t=>`<button class="${sub.biz===t[0]?'on':''}" onclick="sub.biz='${t[0]}';render()">${t[1]}</button>`).join('')}</div><div>${({ozet:bizOzet,rez:bizRez,doluluk:bizDoluluk,musteri:bizMusteri,finans:bizFinans,magaza:bizMagaza,mesaj:bizMesaj})[sub.biz]()}</div></div>`;
+}
+function bizOzet(){
+  const act=RES.filter(r=>r.status!=='cancelled'),pend=RES.filter(r=>r.status==='pending').length;
+  const tHot=ROOMS.filter(r=>r.type==='hotel'),occ=tHot.filter(r=>hotelState(r.id,iso(today))!=='free').length;
+  const mx=Math.max(...FIN.gelir);
+  return `<div class="grid g4" style="margin-bottom:16px"><div class="kpi k1"><small>Bu ay gelir</small><b>172.000 ₺</b><small>▲ %9 geçen aya göre</small></div><div class="kpi k2"><small>Bugünkü doluluk</small><b>${occ}/${tHot.length} oda</b><small>${Math.round(occ/tHot.length*100)}%</small></div><div class="kpi k3"><small>Onay bekleyen</small><b>${pend}</b><small>talep</small></div><div class="kpi k4"><small>Toplam müşteri</small><b>${CUST.length+127}</b><small>kayıtlı köpek: ${CUST.reduce((a,c)=>a+c.dogs.length,0)+141}</small></div></div>
+  <div class="grid g2"><div class="card"><h3>Gelir / Gider (bin ₺)</h3><div class="bars">${FIN.months.map((m,i)=>`<div><div class="b1" style="height:${FIN.gelir[i]/mx*130}px" title="Gelir"></div><div class="b2" style="height:${FIN.gider[i]/mx*130}px" title="Gider"></div><small>${m}</small></div>`).join('')}</div><div class="legend"><span><i style="background:var(--pri2)"></i>Gelir</span><span><i style="background:var(--acc2)"></i>Gider</span></div></div>
+  <div class="card"><h3>Onay bekleyen talepler</h3>${RES.filter(r=>r.status==='pending').map(r=>`<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0"><div><b>${r.dog}</b> • ${room(r.room).name}<br><small>${custOf(r.cust).name} • ${r.hours?fmtD(r.start)+' '+r.hours[0]+':00':fmtD(r.start)+'→'+fmtD(r.end)}</small></div><div><button class="btn sm" onclick="approve(${r.id})">Onayla</button> <button class="btn sm bad" onclick="cancelRes(${r.id})">Reddet</button></div></div>`).join('')||'<p>Bekleyen talep yok 🎉</p>'}</div></div>
+  <div class="card"><h3>Bugün gelen / giden</h3><table><tr><th>Köpek</th><th>Oda</th><th>İşlem</th></tr>${act.filter(r=>!r.hours&&(r.start===iso(today)||r.end===iso(today))).map(r=>`<tr><td>${r.dog}</td><td>${room(r.room).name}</td><td>${r.start===iso(today)?'<span class="pill p-info">Giriş</span>':'<span class="pill p-wait">Çıkış</span>'}</td></tr>`).join('')}</table></div>`;
+}
+function approve(id){const r=RES.find(x=>x.id===id);r.status='confirmed';render();showTpl('onay',id);toast('✅ Onaylandı — müşteriye otomatik mesaj gitti')}
+function bizRez(){
+  return `<div class="card"><h2>Tüm Rezervasyonlar</h2><div style="overflow:auto"><table><tr><th>No</th><th>Müşteri</th><th>Köpek</th><th>Oda</th><th>Tarih</th><th>Tutar / Ödenen</th><th>Durum</th><th>İşlem</th></tr>
+  ${[...RES].sort((a,b)=>b.id-a.id).map(r=>`<tr><td>#${r.id}</td><td>${custOf(r.cust).name}</td><td>${r.dog}</td><td>${room(r.room).name}</td><td>${r.hours?fmtD(r.start)+' '+r.hours[0]+':00–'+(r.hours.slice(-1)[0]+1)+':00':fmtD(r.start)+'→'+fmtD(r.end)}</td><td>${TL(r.total)} / ${TL(r.paid)}</td><td>${stPill(r.status)}</td>
+  <td style="white-space:nowrap">${r.status==='pending'?`<button class="btn sm" onclick="approve(${r.id})">Onayla</button> `:''}${r.status!=='cancelled'?`<button class="btn sm ghost" onclick="showTpl('hatirla',${r.id})">Hatırlat</button> <button class="btn sm bad" onclick="cancelRes(${r.id})">İptal</button>`:''}</td></tr>`).join('')}</table></div></div>`;
+}
+function bizDoluluk(){
+  const days=[...Array(14)].map((_,i)=>addD(today,i)),h=ROOMS.filter(r=>r.type==='hotel');
+  return `<div class="card"><h2>Oda Doluluk Takvimi (14 gün)</h2><div class="cal"><table><tr><th></th>${days.map(d=>`<th>${d.getDate()}<br>${d.toLocaleDateString('tr-TR',{weekday:'short'})}</th>`).join('')}</tr>
+  ${h.map(r=>`<tr><td class="rn">${r.name}</td>${days.map(d=>{const st=hotelState(r.id,iso(d));return `<td><div class="cell c-${st}" style="cursor:default">${st==='free'?'':st==='busy'?'●':'?'}</div></td>`}).join('')}</tr>`).join('')}
+  <tr><td class="rn">Doluluk %</td>${days.map(d=>{const n=h.filter(r=>hotelState(r.id,iso(d))!=='free').length;return `<td><b style="font-size:12px">${Math.round(n/h.length*100)}</b></td>`}).join('')}</tr></table></div>
+  <div class="legend" style="margin-top:10px"><span><i style="background:#dcfce7"></i>Boş</span><span><i style="background:#fde68a"></i>Onay bekliyor</span><span><i style="background:#fecaca"></i>Dolu</span></div></div>`;
+}
+function bizMusteri(){
+  return `<div class="card"><h2>Müşteri Kartları & Tarihçe</h2><div class="row" style="margin-bottom:8px"><input placeholder="Müşteri, köpek veya ırk ara…" style="max-width:340px" oninput="filterCust(this.value)"></div></div><div id="clist">${custList('')}</div>`;
+}
+function custList(q){
+  q=q.toLowerCase();
+  return CUST.filter(c=>!q||(c.name+c.dogs.map(d=>d.name+d.breed).join()).toLowerCase().includes(q)).map(c=>`<div class="card"><div class="row" style="justify-content:space-between"><div><h3 style="margin:0">${c.name}</h3><small style="color:var(--mut)">📞 ${c.phone} • ✉ ${c.email}</small></div><div><button class="btn sm ghost" onclick="toast('Demo: WhatsApp mesajı açılır')">💬 Yaz</button> <button class="btn sm ghost" onclick="showTpl('kampanya',${(RES.find(r=>r.cust===c.id)||RES[0]).id})">🎁 Kampanya gönder</button></div></div>
+   ${c.dogs.map(d=>dogCard(d,false)).join('')}<h3 style="font-size:14px">Geçmiş hizmetler</h3><table>${c.hist.map(h=>`<tr><td>${h[0]}</td><td>${h[1]}</td><td>${h[2]}</td></tr>`).join('')}</table></div>`).join('')||'<div class="card">Sonuç yok</div>';
+}
+function filterCust(v){$('#clist').innerHTML=custList(v)}
+function bizFinans(){
+  const g=FIN.gelir[5]*1000,gi=FIN.gider[5]*1000;
+  return `<div class="grid g3" style="margin-bottom:16px"><div class="kpi k1"><small>Gelir (Ekim)</small><b>${TL(g)}</b></div><div class="kpi k2"><small>Gider (Ekim)</small><b>${TL(gi)}</b></div><div class="kpi k3"><small>Net kâr</small><b>${TL(g-gi)}</b></div></div>
+  <div class="grid g2"><div class="card"><h3>Gelir dağılımı</h3>${[['Pansiyon / otel',48],['Eğitim',24],['Oyun alanı & bakım',14],['Mağaza satışı',14]].map(x=>`<div style="margin:8px 0"><div class="row" style="justify-content:space-between"><span>${x[0]}</span><b>%${x[1]}</b></div><div class="occ"><i style="width:${x[1]}%"></i></div></div>`).join('')}</div>
+  <div class="card"><h3>Giderler</h3><table>${GIDER.map(x=>`<tr><td>${x[0]}</td><td style="text-align:right">${x[1]}</td></tr>`).join('')}</table><button class="btn sm ghost" style="margin-top:8px" onclick="toast('Demo: Gider ekleme formu')">+ Gider ekle</button></div></div>
+  <div class="card"><h3>Son ödemeler (PayTR / iyzico)</h3><table><tr><th>Tarih</th><th>Açıklama</th><th>Kanal</th><th>Tutar</th></tr>${RES.slice(-5).map(r=>`<tr><td>${fmtD(r.start)}</td><td>#${r.id} ${r.dog} – ${room(r.room).name}</td><td>${r.id%2?'PayTR':'iyzico'}</td><td>${TL(r.paid)}</td></tr>`).join('')}</table></div>`;
+}
+function bizMagaza(){
+  return `<div class="card"><h2>Mağaza Ürünleri & Stok</h2><table><tr><th>Ürün</th><th>Fiyat</th><th>Stok</th><th>Bu ay satış</th></tr>${PRODUCTS.map((p,i)=>{const st=[14,60,9,35,4,22,40,7][i];return `<tr><td>${p.e} ${p.n}</td><td>${TL(p.p)}</td><td>${st<10?`<span class="pill p-bad">${st} (kritik)</span>`:st}</td><td>${[12,48,6,22,2,15,31,3][i]}</td></tr>`}).join('')}</table>
+  <button class="btn sm ghost" style="margin-top:10px" onclick="toast('Demo: Ürün ekleme / kargo takibi')">+ Ürün ekle</button></div>`;
+}
+function bizMesaj(){
+  const sample=RES[0].id;
+  return `<div class="card"><h2>Otomatik Mesajlar & E-posta</h2><p style="color:var(--mut);margin-top:0">Aşağıdaki mesajlar olay gerçekleştiğinde WhatsApp, SMS ve e-posta ile müşteriye kendiliğinden gider.</p>
+  <table><tr><th>Tetikleyici</th><th>Kanal</th><th>Durum</th><th></th></tr>
+  ${[['Talep alındığında / ödeme','odeme'],['Rezervasyon onaylandığında','onay'],['Girişten 24 saat önce','hatirla'],['İptal edildiğinde','iptal'],['Kampanya / satış maili (toplu)','kampanya']].map(x=>`<tr><td>${x[0]}</td><td>${tpl(x[1],RES[0]).ch}</td><td><span class="pill p-ok">Aktif</span></td><td><button class="btn sm ghost" onclick="showTpl('${x[1]}',${sample})">Önizle</button></td></tr>`).join('')}</table></div>`;
+}
+
+/* ================= AI ASİSTAN ================= */
+function ask(){
+  const i=$('#cin'),q=i.value.trim();if(!q)return;const box=$('#msgs');
+  box.insertAdjacentHTML('beforeend',`<div class="m u">${q.replace(/</g,'&lt;')}</div>`);i.value='';
+  const l=q.toLowerCase();let a='Bu konuda size yardımcı olması için yetkilimize WhatsApp üzerinden bağlayabilirim. 💬';
+  if(/fiyat|ücret|kaç/.test(l))a='Standart oda 650 ₺/gece, VIP süit 1.100 ₺/gece, oyun alanı 150 ₺/saat, tımar 300 ₺/saattir. 🐾';
+  else if(/boş|müsait|doluluk|yer/.test(l))a='Boş yerleri “Müşteri Paneli → Rezervasyon Yap” takviminde gün ve saat bazında görebilirsiniz (yeşil = boş).';
+  else if(/aşı|kuduz/.test(l))a='Girişte güncel karma ve kuduz aşısı kartı gerekir. Yavrular için ilk 2 aşı tamamlanmış olmalıdır.';
+  else if(/saat|açık|çalış/.test(l))a='Hafta içi ve hafta sonu 08:00–20:00 arası kabul yapıyoruz. Pansiyon 7/24 bakım altındadır.';
+  else if(/iptal|iade/.test(l))a='Girişten 48 saat öncesine kadar ücretsiz iptal; kapora iadesi 3–5 iş günü içinde yapılır.';
+  else if(/eğitim|ders/.test(l))a='Yavru, temel itaat ve davranış eğitimi veriyoruz. İlk değerlendirme seansı ücretsizdir. 🎓';
+  setTimeout(()=>{box.insertAdjacentHTML('beforeend',`<div class="m b">${a}</div>`);box.scrollTop=1e9},500);box.scrollTop=1e9;
+}
+
+/* ================= YÖNLENDİRME ================= */
+const HASHM={site:'site',musteri:'cust',isletme:'biz'},REV={site:'site',cust:'musteri',biz:'isletme'};
+function go(m){mode=m;try{history.replaceState(null,'','#'+REV[m])}catch(e){}render();window.scrollTo(0,0)}
+window.addEventListener('hashchange',()=>{const m=HASHM[location.hash.slice(1)];if(m&&m!==mode){mode=m;render()}});
+function render(){
+  document.querySelectorAll('#modes button').forEach(b=>b.classList.toggle('on',b.dataset.m===mode));
+  $('#app').innerHTML=emo(mode==='site'?viewSite():mode==='cust'?viewCust():viewBiz());icons();
+  if(mode==='site')startSlider();
+}
+document.querySelectorAll('#modes button').forEach(b=>b.onclick=()=>go(b.dataset.m));
+$('#brand').textContent=DEMO.name;['.top','.fab','.chat'].forEach(q=>iconize($(q)));
+{const m=HASHM[location.hash.slice(1)];if(m)mode=m}
+render();
+</script>
+</body>
+</html>
